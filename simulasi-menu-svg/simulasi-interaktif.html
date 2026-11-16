@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulasi Interaktif — Barber Suite v4.2.0 by Kriakarya 2026</title>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --card: #171513;
+      --border: #2b2723;
+      --copper: #c88a4b;
+      --copper-light: #d89b5c;
+      --green: #16a34a;
+      --text: #f5f3ef;
+      --muted: #a8a29e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    header h1 {
+      font-family: Georgia, serif;
+      font-size: 28px;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    header p {
+      font-size: 13px;
+      color: var(--copper-light);
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    .sidebar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .sidebar h2 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin: 4px 8px 10px;
+    }
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-bottom: 4px;
+    }
+    .menu-btn:hover {
+      background: rgba(200, 138, 75, 0.1);
+    }
+    .menu-btn.active {
+      background: var(--copper);
+      color: #0d0d0d;
+      font-weight: 700;
+    }
+    .menu-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .menu-btn.active .menu-num {
+      background: #0d0d0d;
+      color: var(--copper-light);
+    }
+    .stage {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+    @media (max-width: 980px) {
+      .stage { grid-template-columns: 1fr; justify-items: center; }
+    }
+    .phone-frame {
+      width: 390px;
+      max-width: 100%;
+      border-radius: 32px;
+      padding: 6px;
+      background: #262626;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    }
+    .phone-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 26px;
+    }
+    .info-panel h3 {
+      font-family: Georgia, serif;
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(200, 138, 75, 0.18);
+      color: var(--copper-light);
+      margin-bottom: 12px;
+    }
+    .info-panel p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #d6d3d1;
+      margin-bottom: 16px;
+    }
+    .steps-box {
+      background: #0d0d0d;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .steps-box h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--copper-light);
+      margin-bottom: 8px;
+    }
+    .steps-box ul {
+      padding-left: 18px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #e7e5e4;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      padding: 11px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #262626;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--copper);
+      color: #0d0d0d;
+      border-color: var(--copper);
+    }
+    .btn-green {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+    .flow-banner {
+      margin-top: 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      text-align: center;
+    }
+    .flow-banner img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Barber Suite v4.2.0</h1>
+      <p>by Kriakarya 2026 — Simulasi Penggunaan &amp; Pratinjau SVG Seluruh Menu</p>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>Daftar Menu Aplikasi (13 Layar)</h2>
+        <div id="menuList"></div>
+      </aside>
+
+      <main class="stage">
+        <div class="phone-frame">
+          <img id="screenImg" src="02-beranda.svg" alt="Pratinjau Menu" />
+        </div>
+        <div class="info-panel">
+          <span class="badge" id="stepBadge">Menu 2 dari 13</span>
+          <h3 id="screenTitle">Beranda (Dashboard Harian)</h3>
+          <p id="screenDesc"></p>
+          <div class="steps-box">
+            <h4>Cara Penggunaan pada Layar Ini:</h4>
+            <ul id="screenBullets"></ul>
+          </div>
+          <div class="controls">
+            <button class="btn" id="prevBtn">← Sebelumnya</button>
+            <button class="btn btn-primary" id="nextBtn">Langkah Berikutnya →</button>
+            <button class="btn btn-green" id="autoPlayBtn">▶ Putar Simulasi Otomatis</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="flow-banner">
+      <img src="00-alur-simulasi.svg" alt="Diagram Alur Simulasi" />
+    </div>
+  </div>
+
+  <script>
+    const screens = [
+      {
+        file: '01-onboarding.svg',
+        title: '1. Persiapan Awal (Onboarding)',
+        desc: 'Muncul otomatis saat aplikasi pertama kali diinstal untuk menyiapkan identitas barbershop dan daftar kapster awal.',
+        bullets: [
+          'Isi Nama Barbershop, Alamat, dan Nomor Telepon/WA Toko.',
+          'Masukkan nama kapster/barber (minimal 1 barber).',
+          'Klik "Simpan & Mulai Pakai Kasir" — 4 layanan dasar otomatis disiapkan.'
+        ]
+      },
+      {
+        file: '02-beranda.svg',
+        title: '2. Beranda (Dashboard Harian)',
+        desc: 'Pusat pantauan operasional harian barbershop yang menampilkan Omzet Hari Ini, jumlah transaksi, rata-rata belanja, dan 5 transaksi terakhir.',
+        bullets: [
+          'Pantau Omzet Hari Ini secara real-time di kartu utama atas.',
+          'Ketuk "+ Transaksi Baru" atau tombol (+) di bawah untuk membuka Kasir.',
+          'Ketuk salah satu transaksi terakhir untuk melihat detail struknya.'
+        ]
+      },
+      {
+        file: '03-kasir-pos.svg',
+        title: '3. Kasir Cepat (Fast POS)',
+        desc: 'Layar kasir berkecepatan tinggi untuk memilih kapster dan menambahkan layanan hanya dengan sekali ketuk.',
+        bullets: [
+          'Pilih chip Barber di baris atas (otomatis mengingat barber terakhir).',
+          'Urutkan layanan berdasarkan Terlaris, A–Z, atau Harga, atau cari cepat.',
+          'Ketuk kartu layanan (mis. Haircut + Wash & Beard Trim), lalu ketuk "Lanjut Bayar".'
+        ]
+      },
+      {
+        file: '04-checkout-kasir.svg',
+        title: '4. Checkout & Simpan Transaksi',
+        desc: 'Lembar konfirmasi pesanan, pengisian nama & nomor WhatsApp pelanggan, diskon, serta pemilihan metode bayar.',
+        bullets: [
+          'Ketik nama pelanggan (pelanggan lama otomatis mengisi nomor WhatsApp).',
+          'Pilih metode pembayaran: Tunai, Transfer, atau QRIS.',
+          'Tambahkan diskon (Rp / %) bila ada, lalu ketuk "SIMPAN TRANSAKSI".'
+        ]
+      },
+      {
+        file: '05-struk-berhasil.svg',
+        title: '5. Transaksi Berhasil & Kirim Struk ke WA',
+        desc: 'Menampilkan struk digital bergaya kertas thermal cetak (HD & ringan ~28 KB) beserta teks apresiasi pelanggan.',
+        bullets: [
+          'Ketuk tombol hijau "Kirim Struk".',
+          'Gambar struk dan teks apresiasi langsung dikirim ke nomor WhatsApp pelanggan yang sesuai.',
+          'Jika nomor WA pelanggan belum terisi, aplikasi otomatis meminta nomor WA terlebih dahulu.'
+        ]
+      },
+      {
+        file: '06-pelanggan-crm.svg',
+        title: '6. Pelanggan & CRM (Follow-Up >3 Minggu)',
+        desc: 'Menyimpan riwayat kunjungan setiap pelanggan dan mendeteksi pelanggan yang sudah lebih dari 3 minggu belum cukur.',
+        bullets: [
+          'Pilih tab "Belum Kembali (>3 mgg)" untuk melihat pelanggan yang waktunya cukur kembali.',
+          'Ketuk tombol "Follow-Up WA" untuk mengirim pesan pengingat personal 1-klik ke WhatsApp pelanggan.'
+        ]
+      },
+      {
+        file: '07-laporan-omzet.svg',
+        title: '7. Laporan Omzet, Komisi Barber & Export PDF',
+        desc: 'Rekapitulasi keuangan lengkap untuk Hari Ini, Minggu Ini, Bulan Ini, atau rentang tanggal kustom.',
+        bullets: [
+          'Lihat Total Omzet serta pemisahan uang masuk Tunai, Transfer, dan QRIS.',
+          'Cek tabel Pendapatan per Barber untuk menghitung komisi/bagi hasil kapster.',
+          'Ketuk tombol "PDF" atau "CSV" di kanan atas untuk mengekspor laporan resmi.'
+        ]
+      },
+      {
+        file: '08-menu-lainnya.svg',
+        title: '8. Menu Lainnya',
+        desc: 'Pusat navigasi menuju Riwayat Transaksi, Katalog Layanan, Data Barber, Backup & Restore, serta Pengaturan.',
+        bullets: [
+          'Akses seluruh pengaturan master data toko dari satu halaman.',
+          'Menampilkan identitas aplikasi Barber Suite v4.2.0 by Kriakarya 2026.'
+        ]
+      },
+      {
+        file: '09-riwayat-transaksi.svg',
+        title: '9. Riwayat Transaksi & Void',
+        desc: 'Daftar seluruh transaksi dengan pencarian nomor struk/nama pelanggan, filter tanggal, serta fitur pembatalan (Void) berjejak.',
+        bullets: [
+          'Cari transaksi berdasarkan nomor struk TRX-... atau nama pelanggan.',
+          'Buka detail transaksi untuk mengirim ulang struk atau melakukan Void dengan alasan wajib.'
+        ]
+      },
+      {
+        file: '10-kelola-layanan.svg',
+        title: '10. Kelola Katalog Layanan',
+        desc: 'Mengatur daftar layanan barbershop, harga satuan, estimasi durasi menit, dan status aktif.',
+        bullets: [
+          'Ketuk "+ Layanan" untuk menambah layanan baru.',
+          'Perubahan harga layanan tidak mengubah riwayat struk transaksi masa lalu.'
+        ]
+      },
+      {
+        file: '11-kelola-barber.svg',
+        title: '11. Kelola Barber / Kapster',
+        desc: 'Mengelola daftar kapster aktif maupun nonaktif di barbershop.',
+        bullets: [
+          'Ketuk "+ Barber" untuk menambah kapster baru.',
+          'Nonaktifkan kapster yang sedang cuti tanpa menghapus riwayat laporan komisinya.'
+        ]
+      },
+      {
+        file: '12-backup-restore.svg',
+        title: '12. Backup & Restore Database (.json)',
+        desc: 'Mencadangkan seluruh data lokal ke file .json dengan verifikasi integritas SHA-256 Checksum.',
+        bullets: [
+          'Ketuk "Ekspor Backup Sekarang (.json)" untuk menyimpan cadangan data.',
+          'Ketuk "Pilih File Backup (.json)" saat ingin memulihkan data di perangkat baru.'
+        ]
+      },
+      {
+        file: '13-pengaturan-pin.svg',
+        title: '13. Pengaturan Toko & Keamanan PIN',
+        desc: 'Mengatur profil barbershop, logo struk, footer struk, template WhatsApp, serta kunci keamanan PIN 4–6 digit.',
+        bullets: [
+          'Unggah logo barbershop agar tampil di Beranda dan bagian atas struk.',
+          'Aktifkan PIN 4–6 digit dengan fitur Auto-Lock untuk mengamankan laporan dan kasir.'
+        ]
+      }
+    ];
+
+    let currentIdx = 1;
+    let timer = null;
+
+    const menuList = document.getElementById('menuList');
+    const screenImg = document.getElementById('screenImg');
+    const stepBadge = document.getElementById('stepBadge');
+    const screenTitle = document.getElementById('screenTitle');
+    const screenDesc = document.getElementById('screenDesc');
+    const screenBullets = document.getElementById('screenBullets');
+    const autoPlayBtn = document.getElementById('autoPlayBtn');
+
+    function renderMenu() {
+      menuList.innerHTML = '';
+      screens.forEach((s, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'menu-btn' + (idx === currentIdx ? ' active' : '');
+        btn.innerHTML = `<span class="menu-num">${idx + 1}</span><span>${s.title.replace(/^\d+\.\s*/, '')}</span>`;
+        btn.onclick = () => {
+          stopAutoPlay();
+          setScreen(idx);
+        };
+        menuList.appendChild(btn);
+      });
+    }
+
+    function setScreen(idx) {
+      currentIdx = (idx + screens.length) % screens.length;
+      const s = screens[currentIdx];
+      screenImg.src = s.file;
+      stepBadge.textContent = `Layar ${currentIdx + 1} dari ${screens.length} · ${s.file}`;
+      screenTitle.textContent = s.title;
+      screenDesc.textContent = s.desc;
+      screenBullets.innerHTML = s.bullets.map((b) => `<li>${b}</li>`).join('');
+      renderMenu();
+    }
+
+    function stopAutoPlay() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+        autoPlayBtn.textContent = '▶ Putar Simulasi Otomatis';
+      }
+    }
+
+    document.getElementById('prevBtn').onclick = () => {
+      stopAutoPlay();
+      setScreen(currentIdx - 1);
+    };
+
+    document.getElementById('nextBtn').onclick = () => {
+      stopAutoPlay();
+      setScreen(currentIdx + 1);
+    };
+
+    autoPlayBtn.onclick = () => {
+      if (timer) {
+        stopAutoPlay();
+      } else {
+        setScreen(0);
+        autoPlayBtn.textContent = '⏸ Hentikan Simulasi';
+        timer = setInterval(() => {
+          setScreen(currentIdx + 1);
+        }, 2800);
+      }
+    };
+
+    setScreen(1);
+  </script>
+</body>
+</html>
+

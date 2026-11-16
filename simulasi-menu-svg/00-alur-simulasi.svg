@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" width="1200" height="440">
+  <rect width="1200" height="440" rx="24" fill="#0D0D0D"/>
+  <text x="600" y="48" text-anchor="middle" font-family="Georgia, serif" font-size="24" font-weight="700" fill="#FFFFFF">Simulasi Alur Penggunaan Barber Suite v4.2.0</text>
+  <text x="600" y="72" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#D89B5C">by Kriakarya 2026 — Alur Kasir Cepat (≤ 30 Detik) hingga Laporan &amp; Retensi Pelanggan</text>
+
+  <!-- Step 1 -->
+  <g transform="translate(36, 108)">
+    <rect width="208" height="280" rx="18" fill="#1C1917" stroke="#C88A4B" stroke-width="1.5"/>
+    <circle cx="34" cy="34" r="16" fill="#C88A4B"/>
+    <text x="34" y="39" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="800" fill="#0D0D0D">1</text>
+    <text x="60" y="39" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">Pilih Barber &amp; Jasa</text>
+    <text x="20" y="74" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Buka menu Kasir (+)</text>
+    <text x="20" y="96" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Tap chip Barber (Dimas)</text>
+    <text x="20" y="118" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Tap kartu layanan:</text>
+    <rect x="20" y="132" width="168" height="54" rx="10" fill="#0D0D0D" stroke="#44403C"/>
+    <text x="32" y="154" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">Haircut + Wash (Rp 65rb)</text>
+    <text x="32" y="172" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#D89B5C">+ Beard Trim (Rp 25rb)</text>
+    <rect x="20" y="218" width="168" height="40" rx="10" fill="#C88A4B"/>
+    <text x="104" y="243" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="800" fill="#0D0D0D">Lanjut Bayar · Rp 90rb</text>
+  </g>
+
+  <text x="256" y="248" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#D89B5C">→</text>
+
+  <!-- Step 2 -->
+  <g transform="translate(274, 108)">
+    <rect width="208" height="280" rx="18" fill="#1C1917" stroke="#44403C" stroke-width="1.5"/>
+    <circle cx="34" cy="34" r="16" fill="#C88A4B"/>
+    <text x="34" y="39" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="800" fill="#0D0D0D">2</text>
+    <text x="60" y="39" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">Checkout &amp; Simpan</text>
+    <text x="20" y="74" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Ketik nama: Andi Pratama</text>
+    <text x="20" y="96" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Nomor WA otomatis terisi</text>
+    <text x="20" y="118" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Pilih bayar: Tunai / QRIS</text>
+    <rect x="20" y="132" width="168" height="54" rx="10" fill="#0D0D0D" stroke="#44403C"/>
+    <text x="32" y="154" font-family="ui-monospace, monospace" font-size="11" fill="#A8A29E">WA: 081234567890</text>
+    <text x="32" y="172" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#FFFFFF">Total: Rp 90.000 (QRIS)</text>
+    <rect x="20" y="218" width="168" height="40" rx="10" fill="#FFFFFF"/>
+    <text x="104" y="243" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="800" fill="#0D0D0D">SIMPAN TRANSAKSI</text>
+  </g>
+
+  <text x="494" y="248" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#D89B5C">→</text>
+
+  <!-- Step 3 -->
+  <g transform="translate(512, 108)">
+    <rect width="208" height="280" rx="18" fill="#1C1917" stroke="#16A34A" stroke-width="2"/>
+    <circle cx="34" cy="34" r="16" fill="#16A34A"/>
+    <text x="34" y="39" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF">3</text>
+    <text x="60" y="39" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">Klik &quot;Kirim Struk&quot;</text>
+    <text x="20" y="74" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Struk kertas digital HD</text>
+    <text x="20" y="96" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">  otomatis dibuat (~28 KB)</text>
+    <text x="20" y="118" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Gambar struk + teks</text>
+    <text x="20" y="138" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">  apresiasi langsung dikirim</text>
+    <text x="20" y="158" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">  ke nomor WA Andi!</text>
+    <rect x="20" y="218" width="168" height="40" rx="10" fill="#16A34A"/>
+    <text x="104" y="243" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="800" fill="#FFFFFF">💬 Kirim Struk</text>
+  </g>
+
+  <text x="732" y="248" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#D89B5C">→</text>
+
+  <!-- Step 4 -->
+  <g transform="translate(750, 108)">
+    <rect width="200" height="280" rx="18" fill="#1C1917" stroke="#44403C" stroke-width="1.5"/>
+    <circle cx="34" cy="34" r="16" fill="#C88A4B"/>
+    <text x="34" y="39" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="800" fill="#0D0D0D">4</text>
+    <text x="60" y="39" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">Laporan &amp; PDF</text>
+    <text x="20" y="74" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Cek Total Omzet</text>
+    <text x="20" y="96" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Pisah Tunai/Transfer/QRIS</text>
+    <text x="20" y="118" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Komisi per Barber otomatis</text>
+    <text x="20" y="140" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Export PDF &amp; CSV 1-klik</text>
+    <rect x="20" y="218" width="160" height="40" rx="10" fill="#262626" stroke="#C88A4B"/>
+    <text x="100" y="243" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#D89B5C">📄 Export Laporan PDF</text>
+  </g>
+
+  <text x="960" y="248" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#D89B5C">→</text>
+
+  <!-- Step 5 -->
+  <g transform="translate(976, 108)">
+    <rect width="190" height="280" rx="18" fill="#1C1917" stroke="#44403C" stroke-width="1.5"/>
+    <circle cx="34" cy="34" r="16" fill="#C88A4B"/>
+    <text x="34" y="39" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="800" fill="#0D0D0D">5</text>
+    <text x="60" y="39" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">CRM &amp; Backup</text>
+    <text x="20" y="74" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Filter pelanggan yang</text>
+    <text x="20" y="94" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">  &gt;3 minggu belum cukur</text>
+    <text x="20" y="118" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Follow-Up WA 1-klik</text>
+    <text x="20" y="140" font-family="Inter, sans-serif" font-size="11.5" fill="#D6D3D1">• Backup database (.json)</text>
+    <rect x="20" y="218" width="150" height="40" rx="10" fill="#16A34A"/>
+    <text x="95" y="243" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF">💬 Follow-Up WA</text>
+  </g>
+</svg>

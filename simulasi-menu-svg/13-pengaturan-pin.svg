@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844">
+  <!-- 13 - Menu Pengaturan & Keamanan PIN -->
+  <defs>
+    <linearGradient id="darkHero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0D0D0D"/>
+      <stop offset="100%" stop-color="#1C1917"/>
+    </linearGradient>
+    <linearGradient id="copperGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#C88A4B"/>
+      <stop offset="100%" stop-color="#B07236"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0D0D0D" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="390" height="844" rx="28" fill="#F5F3EF"/>
+
+  <!-- Top Status Bar -->
+  <rect x="0" y="0" width="390" height="28" fill="#0D0D0D"/>
+  <text x="20" y="18" font-family="Inter, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#E7E5E4">09:41</text>
+  <text x="370" y="18" text-anchor="end" font-family="Inter, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#D89B5C">100%</text>
+
+  
+  <rect x="0" y="28" width="390" height="56" fill="#F5F3EF"/>
+  <line x1="0" y1="84" x2="390" y2="84" stroke="#E7E5E4"/>
+  <text x="20" y="54" font-family="Georgia, serif" font-size="17" font-weight="700" fill="#0D0D0D">←  Pengaturan</text>
+  <text x="44" y="71" font-family="Inter, sans-serif" font-size="11" fill="#78716C">Profil barbershop, template pesan, dan keamanan</text>
+
+  <g filter="url(#cardShadow)" transform="translate(16, 100)">
+    <rect width="358" height="314" rx="16" fill="#FFFFFF" stroke="#E7E5E4"/>
+    <text x="16" y="28" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#0D0D0D">Profil &amp; Struk Barbershop</text>
+
+    <rect x="16" y="42" width="48" height="48" rx="14" fill="#0D0D0D"/>
+    <text x="40" y="73" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="700" fill="#D89B5C">G</text>
+    <rect x="76" y="52" width="110" height="28" rx="8" fill="#FFFFFF" stroke="#D6D3D1"/>
+    <text x="131" y="70" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#0D0D0D">Unggah Logo</text>
+
+    <text x="16" y="112" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#57534E">Nama Barbershop *</text>
+    <rect x="16" y="120" width="326" height="36" rx="10" fill="#FAFAF9" stroke="#D6D3D1"/>
+    <text x="28" y="143" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#0D0D0D">Gentlemen&apos;s Cut Studio</text>
+
+    <text x="16" y="176" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#57534E">Footer Struk</text>
+    <rect x="16" y="184" width="326" height="36" rx="10" fill="#FAFAF9" stroke="#D6D3D1"/>
+    <text x="28" y="207" font-family="Inter, sans-serif" font-size="12" fill="#0D0D0D">Terima kasih, sampai jumpa lagi! ✂️</text>
+
+    <rect x="16" y="256" width="326" height="42" rx="12" fill="#0D0D0D"/>
+    <text x="179" y="282" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF">Simpan Pengaturan</text>
+  </g>
+
+  <g filter="url(#cardShadow)" transform="translate(16, 428)">
+    <rect width="358" height="150" rx="16" fill="#FFFFFF" stroke="#E7E5E4"/>
+    <text x="16" y="28" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#0D0D0D">🔒 Keamanan PIN (4–6 Digit)</text>
+    <rect x="16" y="44" width="326" height="38" rx="10" fill="#DCFCE7"/>
+    <text x="28" y="67" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#16A34A">Status: PIN Aktif (Auto-lock 5 menit)</text>
+
+    <rect x="16" y="96" width="156" height="36" rx="10" fill="#FFFFFF" stroke="#D6D3D1"/>
+    <text x="94" y="119" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#0D0D0D">Ubah PIN</text>
+    <rect x="186" y="96" width="156" height="36" rx="10" fill="#FEE2E2"/>
+    <text x="264" y="119" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#DC2626">Nonaktifkan PIN</text>
+  </g>
+
+  
+  <!-- Bottom Navigation -->
+  <g transform="translate(0, 772)">
+    <rect x="0" y="0" width="390" height="72" fill="#0D0D0D"/>
+    <line x1="0" y1="0" x2="390" y2="0" stroke="#262626" stroke-width="1"/>
+    <!-- Beranda -->
+    <g transform="translate(39, 16)">
+      <path d="M-8,8 L0,0 L8,8 L8,18 L-8,18 Z" fill="none" stroke="#78716C" stroke-width="1.8" stroke-linejoin="round"/>
+      <text x="0" y="34" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#78716C">Beranda</text>
+    </g>
+    <!-- Pelanggan -->
+    <g transform="translate(117, 16)">
+      <circle cx="0" cy="5" r="4.5" fill="none" stroke="#78716C" stroke-width="1.8"/>
+      <path d="M-9,18 C-9,13 9,13 9,18" fill="none" stroke="#78716C" stroke-width="1.8" stroke-linecap="round"/>
+      <text x="0" y="34" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#78716C">Pelanggan</text>
+    </g>
+    <!-- Kasir Center FAB -->
+    <g transform="translate(195, 2)">
+      <circle cx="0" cy="6" r="24" fill="#C88A4B" stroke="#0D0D0D" stroke-width="4"/>
+      <line x1="-7" y1="6" x2="7" y2="6" stroke="#0D0D0D" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="0" y1="-1" x2="0" y2="13" stroke="#0D0D0D" stroke-width="2.5" stroke-linecap="round"/>
+      <text x="0" y="48" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#D89B5C">Kasir</text>
+    </g>
+    <!-- Laporan -->
+    <g transform="translate(273, 16)">
+      <rect x="-8" y="8" width="4" height="10" rx="1" fill="#78716C"/>
+      <rect x="-2" y="3" width="4" height="15" rx="1" fill="#78716C"/>
+      <rect x="4" y="0" width="4" height="18" rx="1" fill="#78716C"/>
+      <text x="0" y="34" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#78716C">Laporan</text>
+    </g>
+    <!-- Lainnya -->
+    <g transform="translate(351, 16)">
+      <line x1="-8" y1="3" x2="8" y2="3" stroke="#D89B5C" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="-8" y1="9" x2="8" y2="9" stroke="#D89B5C" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="-8" y1="15" x2="8" y2="15" stroke="#D89B5C" stroke-width="1.8" stroke-linecap="round"/>
+      <text x="0" y="34" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#D89B5C">Lainnya</text>
+    </g>
+  </g>
+</svg>

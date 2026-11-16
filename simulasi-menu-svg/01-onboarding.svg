@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844">
+  <!-- 01 - Menu Onboarding (Persiapan Awal Toko) -->
+  <defs>
+    <linearGradient id="darkHero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0D0D0D"/>
+      <stop offset="100%" stop-color="#1C1917"/>
+    </linearGradient>
+    <linearGradient id="copperGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#C88A4B"/>
+      <stop offset="100%" stop-color="#B07236"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0D0D0D" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="390" height="844" rx="28" fill="#F5F3EF"/>
+
+  <!-- Top Status Bar -->
+  <rect x="0" y="0" width="390" height="28" fill="#0D0D0D"/>
+  <text x="20" y="18" font-family="Inter, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#E7E5E4">09:41</text>
+  <text x="370" y="18" text-anchor="end" font-family="Inter, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#D89B5C">100%</text>
+
+  
+  <rect x="0" y="28" width="390" height="170" fill="url(#darkHero)"/>
+  <rect x="167" y="48" width="56" height="56" rx="16" fill="#1C1917" stroke="#C88A4B" stroke-width="1.5"/>
+  <text x="195" y="84" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="700" fill="#D89B5C">B</text>
+  <text x="195" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="700" fill="#FFFFFF">Barber Suite v4.2.0</text>
+  <text x="195" y="148" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#D89B5C">by Kriakarya 2026</text>
+  <text x="195" y="172" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#A8A29E">Siapkan profil barbershop &amp; barber pertama Anda</text>
+
+  <!-- Form Card 1 -->
+  <g filter="url(#cardShadow)" transform="translate(16, 214)">
+    <rect width="358" height="236" rx="16" fill="#FFFFFF" stroke="#E7E5E4"/>
+    <text x="16" y="28" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#0D0D0D">1. Identitas Barbershop</text>
+
+    <text x="16" y="54" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#57534E">Nama Barbershop *</text>
+    <rect x="16" y="62" width="326" height="38" rx="10" fill="#FFFFFF" stroke="#C88A4B" stroke-width="1.5"/>
+    <text x="28" y="85" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#0D0D0D">Gentlemen&apos;s Cut Studio</text>
+
+    <text x="16" y="120" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#57534E">Alamat Barbershop</text>
+    <rect x="16" y="128" width="326" height="38" rx="10" fill="#FAFAF9" stroke="#D6D3D1"/>
+    <text x="28" y="151" font-family="Inter, sans-serif" font-size="12" fill="#1C1917">Jl. Kemang Raya No. 18, Jakarta</text>
+
+    <text x="16" y="186" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#57534E">Nomor Telepon / WhatsApp Toko</text>
+    <rect x="16" y="194" width="326" height="30" rx="8" fill="#FAFAF9" stroke="#D6D3D1"/>
+    <text x="28" y="213" font-family="Inter, sans-serif" font-size="12" fill="#1C1917">0812-8899-7766</text>
+  </g>
+
+  <!-- Form Card 2 -->
+  <g filter="url(#cardShadow)" transform="translate(16, 464)">
+    <rect width="358" height="190" rx="16" fill="#FFFFFF" stroke="#E7E5E4"/>
+    <text x="16" y="28" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#0D0D0D">2. Daftar Barber (Minimal 1)</text>
+    <text x="342" y="28" text-anchor="end" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#C88A4B">+ Tambah</text>
+
+    <rect x="16" y="44" width="326" height="38" rx="10" fill="#FAFAF9" stroke="#D6D3D1"/>
+    <text x="28" y="67" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#0D0D0D">Dimas (Senior Barber)</text>
+
+    <rect x="16" y="92" width="326" height="38" rx="10" fill="#FAFAF9" stroke="#D6D3D1"/>
+    <text x="28" y="115" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#0D0D0D">Raka</text>
+
+    <rect x="16" y="142" width="326" height="34" rx="8" fill="#F5F3EF"/>
+    <text x="28" y="163" font-family="Inter, sans-serif" font-size="11" fill="#57534E">✓ 4 layanan awal otomatis disiapkan (Haircut, Wash, Shaving, Spa)</text>
+  </g>
+
+  <!-- Submit Button -->
+  <g transform="translate(16, 674)">
+    <rect width="358" height="50" rx="14" fill="#0D0D0D"/>
+    <text x="179" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">Simpan &amp; Mulai Pakai Kasir</text>
+  </g>
+
+  
+</svg>

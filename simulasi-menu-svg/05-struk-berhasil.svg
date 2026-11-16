@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844">
+  <!-- 05 - Menu Transaksi Berhasil & Kirim Struk -->
+  <defs>
+    <linearGradient id="darkHero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0D0D0D"/>
+      <stop offset="100%" stop-color="#1C1917"/>
+    </linearGradient>
+    <linearGradient id="copperGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#C88A4B"/>
+      <stop offset="100%" stop-color="#B07236"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0D0D0D" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="390" height="844" rx="28" fill="#F5F3EF"/>
+
+  <!-- Top Status Bar -->
+  <rect x="0" y="0" width="390" height="28" fill="#0D0D0D"/>
+  <text x="20" y="18" font-family="Inter, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#E7E5E4">09:41</text>
+  <text x="370" y="18" text-anchor="end" font-family="Inter, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#D89B5C">100%</text>
+
+  
+  <!-- Success Card -->
+  <g filter="url(#cardShadow)" transform="translate(16, 40)">
+    <rect width="358" height="330" rx="18" fill="#FFFFFF" stroke="#E7E5E4"/>
+    <rect width="358" height="148" rx="18" fill="#0D0D0D"/>
+    <circle cx="179" cy="34" r="18" fill="#262626" stroke="#C88A4B" stroke-width="1.5"/>
+    <text x="179" y="40" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" font-weight="800" fill="#D89B5C">✓</text>
+    <text x="179" y="70" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#FFFFFF">Transaksi Berhasil!</text>
+    <text x="179" y="86" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="#A8A29E">TRX-20261111-0023</text>
+    <text x="179" y="116" text-anchor="middle" font-family="ui-monospace, monospace" font-size="24" font-weight="800" fill="#D89B5C">Rp 90.000</text>
+    <text x="179" y="135" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#D6D3D1">Andi Pratama · QRIS · Barber Dimas</text>
+
+    <!-- Primary Green Button: Kirim Struk -->
+    <rect x="14" y="160" width="330" height="46" rx="12" fill="#16A34A"/>
+    <text x="179" y="188" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">💬  Kirim Struk</text>
+
+    <!-- Target WA Row -->
+    <rect x="14" y="214" width="330" height="28" rx="8" fill="#F5F3EF"/>
+    <text x="26" y="232" font-family="Inter, sans-serif" font-size="11" fill="#57534E">📞 Tujuan WA: 081234567890</text>
+    <text x="332" y="232" text-anchor="end" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#B07236">Ubah Nomor</text>
+
+    <!-- Secondary Buttons -->
+    <rect x="14" y="250" width="104" height="32" rx="8" fill="#FFFFFF" stroke="#D6D3D1"/>
+    <text x="66" y="270" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#1C1917">⬇ Unduh</text>
+    <rect x="127" y="250" width="104" height="32" rx="8" fill="#FFFFFF" stroke="#D6D3D1"/>
+    <text x="179" y="270" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#1C1917">↗ Bagikan</text>
+    <rect x="240" y="250" width="104" height="32" rx="8" fill="#FFFFFF" stroke="#D6D3D1"/>
+    <text x="292" y="270" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#1C1917">📄 Detail</text>
+
+    <rect x="14" y="290" width="160" height="30" rx="8" fill="#E7E5E4"/>
+    <text x="94" y="309" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0D0D0D">+ Transaksi Baru</text>
+    <text x="262" y="309" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#57534E">⌂ Beranda</text>
+  </g>
+
+  <!-- Thermal Paper Receipt Preview -->
+  <text x="24" y="392" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#78716C">PRATINJAU STRUK</text>
+  <rect x="312" y="379" width="58" height="18" rx="6" fill="#E7E5E4"/>
+  <text x="341" y="391" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9" font-weight="700" fill="#57534E">28 KB</text>
+
+  <g filter="url(#cardShadow)" transform="translate(24, 400)">
+    <rect width="342" height="258" rx="6" fill="#FFFFFF" stroke="#D6D3D1"/>
+    <text x="171" y="26" text-anchor="middle" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#111111">GENTLEMEN&apos;S CUT STUDIO</text>
+    <text x="171" y="42" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="#555555">Jl. Kemang Raya No. 18, Jakarta</text>
+    <text x="171" y="56" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="#555555">Telp: 0812-8899-7766</text>
+    <line x1="16" y1="68" x2="326" y2="68" stroke="#888888" stroke-dasharray="4 4"/>
+    <text x="16" y="84" font-family="ui-monospace, monospace" font-size="10" fill="#444444">No. Struk</text>
+    <text x="326" y="84" text-anchor="end" font-family="ui-monospace, monospace" font-size="10" font-weight="700" fill="#111111">TRX-20261111-0023</text>
+    <text x="16" y="100" font-family="ui-monospace, monospace" font-size="10" fill="#444444">Pelanggan</text>
+    <text x="326" y="100" text-anchor="end" font-family="ui-monospace, monospace" font-size="10" fill="#111111">Andi Pratama</text>
+    <text x="16" y="116" font-family="ui-monospace, monospace" font-size="10" fill="#444444">Barber</text>
+    <text x="326" y="116" text-anchor="end" font-family="ui-monospace, monospace" font-size="10" fill="#111111">Dimas</text>
+    <line x1="16" y1="126" x2="326" y2="126" stroke="#888888" stroke-dasharray="4 4"/>
+    <text x="16" y="144" font-family="ui-monospace, monospace" font-size="11" font-weight="700" fill="#111111">Haircut + Wash</text>
+    <text x="326" y="144" text-anchor="end" font-family="ui-monospace, monospace" font-size="11" font-weight="700" fill="#111111">Rp 65.000</text>
+    <text x="16" y="162" font-family="ui-monospace, monospace" font-size="11" font-weight="700" fill="#111111">Beard Trim</text>
+    <text x="326" y="162" text-anchor="end" font-family="ui-monospace, monospace" font-size="11" font-weight="700" fill="#111111">Rp 25.000</text>
+    <line x1="16" y1="174" x2="326" y2="174" stroke="#888888" stroke-dasharray="4 4"/>
+    <text x="16" y="196" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#111111">TOTAL</text>
+    <text x="326" y="196" text-anchor="end" font-family="ui-monospace, monospace" font-size="14" font-weight="700" fill="#111111">Rp 90.000</text>
+    <text x="16" y="214" font-family="ui-monospace, monospace" font-size="10" fill="#444444">Bayar</text>
+    <text x="326" y="214" text-anchor="end" font-family="ui-monospace, monospace" font-size="10" font-weight="700" fill="#111111">QRIS</text>
+    <line x1="16" y1="226" x2="326" y2="226" stroke="#888888" stroke-dasharray="4 4"/>
+    <text x="171" y="244" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="#333333">Terima kasih, sampai jumpa lagi! ✂️</text>
+  </g>
+
+  <!-- Appreciation Text Card -->
+  <g filter="url(#cardShadow)" transform="translate(24, 670)">
+    <rect width="342" height="148" rx="14" fill="#FFFFFF" stroke="#E7E5E4"/>
+    <text x="14" y="22" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#78716C">TEKS APRESIASI PELANGGAN</text>
+    <text x="328" y="22" text-anchor="end" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#B07236">Salin</text>
+    <rect x="12" y="30" width="318" height="106" rx="10" fill="#FAFAF9"/>
+    <text x="20" y="48" font-family="ui-monospace, monospace" font-size="9.5" fill="#1C1917">Terima kasih banyak sudah berkunjung ke</text>
+    <text x="20" y="62" font-family="ui-monospace, monospace" font-size="9.5" font-weight="700" fill="#1C1917">*Gentlemen&apos;s Cut Studio*, Andi Pratama! 🙏✂️</text>
+    <text x="20" y="82" font-family="ui-monospace, monospace" font-size="9.5" fill="#44403C">• No. Struk: TRX-20261111-0023</text>
+    <text x="20" y="96" font-family="ui-monospace, monospace" font-size="9.5" fill="#44403C">• Barber: Dimas · Total: *Rp 90.000* (QRIS)</text>
+    <text x="20" y="118" font-family="ui-monospace, monospace" font-size="9.5" fill="#1C1917">Terima kasih, sampai jumpa lagi! ✂️</text>
+  </g>
+
+  
+</svg>

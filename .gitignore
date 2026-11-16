@@ -1,0 +1,24 @@
+# Dependencies & Build Output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# OS & Logs
+.DS_Store
+*.log
+
+# Android / Gradle Build Artifacts
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+
+# iOS Build Artifacts
+ios/App/Pods/
+ios/App/build/
+
+# Large Release & Media Binaries
+*.apk
+*.idsig
+*.mp4
+*.wav
