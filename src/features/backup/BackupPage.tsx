@@ -163,11 +163,10 @@ export function BackupPage() {
           <div className="flex items-start gap-3">
             <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-brand-700" />
             <div className="space-y-1 text-xs leading-relaxed text-amber-950">
-              <p className="text-sm font-bold">Data 100% Tersimpan Lokal di Perangkat</p>
+              <p className="text-sm font-bold">Data Tersimpan Aman di Aplikasi Ini</p>
               <p>
-                Karena tidak ada server cloud, menghapus data browser atau mengganti HP tanpa
-                cadangan akan menghapus seluruh data transaksi. Buat backup berkala dan simpan file{' '}
-                <code>.bms</code> ke Google Drive, WhatsApp pribadi, atau komputer Anda.
+                Aplikasi bekerja secara mandiri dan offline. Buat cadangan data berkala dan simpan file{' '}
+                <code>.bms</code> ke Google Drive, WhatsApp, atau komputer Anda agar pembukuan Anda selalu aman.
               </p>
               <p className="text-[11px] text-amber-900/90">
                 Catatan v1: file backup <code>.bms</code> belum terenkripsi kata sandi — simpan di

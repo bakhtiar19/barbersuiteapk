@@ -5,8 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Barber Suite',
   webDir: 'dist',
   server: {
-    androidScheme: 'http',
-    cleartext: true,
+    androidScheme: 'https',
   },
   plugins: {
     CapacitorHttp: {

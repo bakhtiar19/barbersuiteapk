@@ -1,24 +1,57 @@
-import { useState, useEffect } from 'react';
-import { ShieldCheck, Smartphone, KeyRound, AlertCircle, RefreshCw } from 'lucide-react';
+import { useState } from 'react';
+import { ShieldCheck, KeyRound, AlertCircle, RefreshCw, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
-import { activateDeviceWithLicense, getDeviceInfo, DeviceInfo } from '@/lib/license';
+import { activateDeviceWithLicense } from '@/lib/license';
 
 interface Props {
   onActivated: () => void;
+  onClose?: () => void;
   initialError?: string;
 }
 
-export function LicenseActivationScreen({ onActivated, initialError }: Props) {
+function sanitizeMessage(msg: string): string {
+  const lower = msg.toLowerCase();
+  if (
+    lower.includes('network') ||
+    lower.includes('fetch') ||
+    lower.includes('koneksi') ||
+    lower.includes('internet') ||
+    lower.includes('202.10') ||
+    lower.includes('timeout') ||
+    lower.includes('server')
+  ) {
+    return 'Koneksi internet bermasalah. Pastikan perangkat terhubung ke internet lalu coba lagi.';
+  }
+  if (
+    lower.includes('device') ||
+    lower.includes('perangkat') ||
+    lower.includes('limit') ||
+    lower.includes('maksimal')
+  ) {
+    return 'Kode lisensi sudah digunakan atau tidak dapat diaktifkan. Silakan hubungi admin layanan pelanggan.';
+  }
+  if (
+    lower.includes('not found') ||
+    lower.includes('tidak ditemukan') ||
+    lower.includes('invalid') ||
+    lower.includes('salah')
+  ) {
+    return 'Kode lisensi tidak valid. Periksa kembali kombinasi huruf dan angka Anda.';
+  }
+  if (lower.includes('expired') || lower.includes('berakhir') || lower.includes('habis')) {
+    return 'Masa berlaku kode lisensi ini telah selesai. Silakan hubungi admin untuk perpanjangan.';
+  }
+  return msg || 'Aktivasi belum berhasil. Pastikan kode lisensi Anda benar.';
+}
+
+export function LicenseActivationScreen({ onActivated, onClose, initialError }: Props) {
   const [licenseKey, setLicenseKey] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(initialError || null);
-  const [device, setDevice] = useState<DeviceInfo | null>(null);
-
-  useEffect(() => {
-    getDeviceInfo().then(setDevice);
-  }, []);
+  const [error, setError] = useState<string | null>(
+    initialError ? sanitizeMessage(initialError) : null
+  );
 
   const handleActivate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,11 +64,8 @@ export function LicenseActivationScreen({ onActivated, initialError }: Props) {
       await activateDeviceWithLicense(licenseKey);
       onActivated();
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Terjadi kesalahan saat aktivasi lisensi.');
-      }
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(sanitizeMessage(msg));
     } finally {
       setLoading(false);
     }
@@ -43,44 +73,37 @@ export function LicenseActivationScreen({ onActivated, initialError }: Props) {
 
   return (
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-brand-950/95 backdrop-blur-md p-4 overflow-y-auto">
-      <Card className="w-full max-w-md space-y-6 p-6 sm:p-8 bg-brand-900 border-brand-800 text-white shadow-2xl rounded-2xl">
+      <Card className="relative w-full max-w-md space-y-6 p-6 sm:p-8 bg-brand-900 border-brand-800 text-white shadow-2xl rounded-2xl">
         
+        {/* Close button if optional */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            type="button"
+            className="absolute right-4 top-4 p-2 text-brand-400 hover:text-white rounded-xl hover:bg-brand-800 transition"
+            title="Tutup"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        )}
+
         {/* Header */}
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-2 pt-2">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-lg shadow-amber-500/10">
             <ShieldCheck className="h-8 w-8" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-white">Aktivasi Barber Suite</h1>
           <p className="text-sm text-brand-200">
-            Aplikasi ini dilindungi sistem lisensi perangkat. Masukkan kredensial lisensi resmi untuk mengaktifkan perangkat ini.
+            Masukkan kode lisensi resmi Anda untuk mengaktifkan aplikasi.
           </p>
         </div>
-
-        {/* Device Information Card */}
-        {device && (
-          <div className="rounded-xl bg-brand-950/60 border border-brand-800/80 p-3.5 space-y-1.5 text-xs">
-            <div className="flex items-center justify-between text-brand-300">
-              <span className="flex items-center gap-1.5 font-medium">
-                <Smartphone className="h-3.5 w-3.5 text-amber-400" />
-                Perangkat Terdeteksi:
-              </span>
-              <span className="font-semibold text-white">{device.deviceName}</span>
-            </div>
-            <div className="flex items-center justify-between text-brand-400 font-mono text-[11px]">
-              <span>Device ID:</span>
-              <span className="truncate max-w-[200px]" title={device.deviceId}>
-                {device.deviceId.substring(0, 18)}...
-              </span>
-            </div>
-          </div>
-        )}
 
         {/* Error Alert */}
         {error && (
           <div className="flex items-start gap-3 rounded-xl bg-rose-500/10 border border-rose-500/30 p-3.5 text-xs text-rose-200">
             <AlertCircle className="h-4 w-4 text-rose-400 shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <p className="font-semibold text-rose-300">Gagal Mengaktifkan</p>
+              <p className="font-semibold text-rose-300">Pemberitahuan</p>
               <p className="leading-relaxed">{error}</p>
             </div>
           </div>
@@ -90,7 +113,7 @@ export function LicenseActivationScreen({ onActivated, initialError }: Props) {
         <form onSubmit={handleActivate} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-brand-200 uppercase tracking-wider mb-1.5">
-              Kunci Lisensi (License Key)
+              Kode Lisensi
             </label>
             <div className="relative">
               <Input
@@ -117,18 +140,33 @@ export function LicenseActivationScreen({ onActivated, initialError }: Props) {
             {loading ? (
               <span className="flex items-center gap-2">
                 <RefreshCw className="h-4 w-4 animate-spin" />
-                Memverifikasi ke Server...
+                Memeriksa Lisensi...
               </span>
             ) : (
-              'Aktifkan Perangkat Ini'
+              'Aktifkan Aplikasi'
             )}
           </Button>
+
+          {onClose && (
+            <Button
+              type="button"
+              variant="ghost"
+              fullWidth
+              size="sm"
+              onClick={onClose}
+              className="text-brand-300 hover:text-white hover:bg-brand-800/60 text-xs py-2"
+            >
+              Nanti Saja
+            </Button>
+          )}
         </form>
 
         {/* Footer info */}
-        <div className="text-center text-[11px] text-brand-400 border-t border-brand-800/60 pt-4 space-y-1">
-          <p>Satu lisensi hanya berlaku untuk 1 perangkat.</p>
-          <p>Jika Anda mengganti HP/tablet, hubungi administrator untuk mereset lisensi Anda.</p>
+        <div className="text-center text-xs text-brand-300 border-t border-brand-800/60 pt-4 space-y-1">
+          <p className="font-medium">Butuh bantuan kode lisensi?</p>
+          <p className="text-[11px] text-brand-400">
+            Hubungi admin atau layanan pelanggan Kriakarya untuk bantuan aktivasi.
+          </p>
         </div>
 
       </Card>

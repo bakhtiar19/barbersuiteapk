@@ -7,9 +7,11 @@ const TRIAL_STORAGE_KEY = 'barber_trial_data';
 const DEVICE_ID_KEY = 'barber_device_id';
 
 const CANDIDATE_SERVERS = [
-  'http://202.10.35.192',
+  (import.meta.env.VITE_LICENSE_SERVER_URL as string | undefined),
+  '', // Same origin relative path (untuk reverse proxy web hosting / Vercel / Nginx)
   'https://202.10.35.192',
-];
+  'http://202.10.35.192',
+].filter((s) => s !== undefined && s !== null) as string[];
 
 export interface StoredLicense {
   licenseKey: string;
@@ -104,7 +106,7 @@ async function callLicenseApi(
   throw (
     lastError ||
     new Error(
-      'Gagal menghubungi server lisensi (202.10.35.192). Periksa koneksi internet Anda.'
+      'Koneksi internet bermasalah. Pastikan perangkat terhubung ke internet lalu coba lagi.'
     )
   );
 }
@@ -246,7 +248,7 @@ export async function checkTrialStatus(): Promise<{
           expiresAt,
           error:
             (data.message as string) ||
-            'Masa uji coba gratis 14 hari telah berakhir. Masukkan kredensial lisensi untuk melanjutkan.',
+            'Masa uji coba gratis telah selesai. Masukkan kode lisensi untuk melanjutkan.',
         };
       }
 
@@ -272,7 +274,7 @@ export async function checkTrialStatus(): Promise<{
           isValid: false,
           daysLeft: 0,
           expiresAt: cached.expiresAt,
-          error: 'Masa uji coba gratis 14 hari telah berakhir.',
+          error: 'Masa uji coba gratis telah selesai. Masukkan kode lisensi untuk melanjutkan.',
         };
       }
     }
@@ -304,7 +306,7 @@ export async function checkAppAccess(): Promise<AppAccessState> {
         return {
           hasAccess: false,
           isTrial: false,
-          error: 'Masa berlaku lisensi Anda telah berakhir. Hubungi administrator.',
+          error: 'Masa berlaku kode lisensi Anda telah berakhir.',
         };
       }
     }
@@ -347,7 +349,7 @@ export async function checkAppAccess(): Promise<AppAccessState> {
     isTrial: true,
     daysLeft: 0,
     expiresAt: trial.expiresAt,
-    error: trial.error || 'Masa uji coba gratis 14 hari Anda telah berakhir. Masukkan kunci lisensi untuk melanjutkan.',
+    error: trial.error || 'Masa uji coba gratis telah selesai. Masukkan kode lisensi untuk melanjutkan.',
   };
 }
 
@@ -374,8 +376,8 @@ export async function activateDeviceWithLicense(licenseKey: string): Promise<{
   });
 
   if (!ok || !data.success) {
-    const errMsg = typeof data.error === 'string' ? data.error : 'Aktivasi lisensi gagal.';
-    throw new Error(errMsg);
+    const raw = typeof data.error === 'string' ? data.error : (typeof data.message === 'string' ? data.message : '');
+    throw new Error(raw || 'Aktivasi belum berhasil. Silakan periksa kembali kode lisensi Anda.');
   }
 
   const stored: StoredLicense = {

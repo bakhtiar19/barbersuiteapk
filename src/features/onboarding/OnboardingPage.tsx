@@ -233,7 +233,7 @@ export function OnboardingPage() {
             <DatabaseBackup className="mt-0.5 h-5 w-5 shrink-0 text-brand-600" />
             <div className="flex-1 space-y-2">
               <div>
-                <p className="text-sm font-semibold text-brand-900">Pindah dari perangkat lain?</p>
+                <p className="text-sm font-semibold text-brand-900">Punya file cadangan data (.bms)?</p>
                 <p className="text-xs text-muted">
                   Pulihkan langsung seluruh riwayat transaksi, pelanggan, dan pengaturan dari file{' '}
                   <code>.bms</code>.

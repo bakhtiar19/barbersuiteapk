@@ -16,8 +16,26 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            if (project.hasProperty('RELEASE_STORE_FILE')) {
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword project.findProperty('RELEASE_STORE_PASSWORD') ?: System.getenv("KEYSTORE_PASSWORD") ?: "kriakarya2026"
+                keyAlias project.findProperty('RELEASE_KEY_ALIAS') ?: System.getenv("KEY_ALIAS") ?: "kriakarya"
+                keyPassword project.findProperty('RELEASE_KEY_PASSWORD') ?: System.getenv("KEY_PASSWORD") ?: "kriakarya2026"
+            } else if (file('../kriakarya-release.keystore').exists()) {
+                storeFile file('../kriakarya-release.keystore')
+                storePassword System.getenv("KEYSTORE_PASSWORD") ?: (project.findProperty("KEYSTORE_PASSWORD") ?: "barbersuite2026")
+                keyAlias System.getenv("KEY_ALIAS") ?: (project.findProperty("KEY_ALIAS") ?: "barbersuite")
+                keyPassword System.getenv("KEY_PASSWORD") ?: (project.findProperty("KEY_PASSWORD") ?: "barbersuite2026")
+            }
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
