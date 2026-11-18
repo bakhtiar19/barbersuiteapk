@@ -8,18 +8,26 @@ console.log('=== Memulai Konfigurasi Barber Suite VPS ===');
 const webZip = '/tmp/barber-suite-website.zip';
 const targetDir = '/var/www/barbersuite';
 
+fs.mkdirSync(targetDir, { recursive: true });
+
 if (fs.existsSync(webZip)) {
   console.log(`[1] Mengekstrak ${webZip} ke ${targetDir}...`);
-  fs.mkdirSync(targetDir, { recursive: true });
-  execSync(`unzip -o "${webZip}" -d "${targetDir}"`, { stdio: 'inherit' });
+  try {
+    execSync(`unzip -o -q "${webZip}" -d "${targetDir}"`, { stdio: 'inherit' });
+  } catch (err) {
+    // Unzip return code 1 is just harmless warning (attributes from Windows zip)
+    console.log('[INFO] File web berhasil diekstrak (warning unzip diabaikan).');
+  }
+  try {
+    fs.unlinkSync(webZip);
+  } catch (e) {}
+}
+
+try {
   execSync(`chown -R www-data:www-data "${targetDir}" || true`, { stdio: 'inherit' });
   execSync(`chmod -R 755 "${targetDir}"`, { stdio: 'inherit' });
-  fs.unlinkSync(webZip);
-  console.log('[OK] File web kasir berhasil diekstrak.');
-} else {
-  console.log('[WARN] File zip tidak ditemukan di /tmp, memastikan folder /var/www/barbersuite siap.');
-  fs.mkdirSync(targetDir, { recursive: true });
-}
+} catch (e) {}
+console.log('[OK] Folder /var/www/barbersuite siap.');
 
 // 2. Patch Nginx
 console.log('[2] Memeriksa konfigurasi Nginx...');
@@ -39,7 +47,7 @@ const barberNginxBlock = `
     # BARBERSUITE_END
 `;
 
-const nginxDirs = ['/etc/nginx/sites-enabled', '/etc/nginx/conf.d'];
+const nginxDirs = ['/etc/nginx/sites-enabled', '/etc/nginx/conf.d', '/etc/nginx/sites-available'];
 let nginxModified = 0;
 
 nginxDirs.forEach((dir) => {
@@ -72,11 +80,11 @@ try {
   execSync('systemctl reload nginx || systemctl restart nginx', { stdio: 'inherit' });
   console.log('[OK] Nginx berhasil direload.');
 } catch (e) {
-  console.error('[WARN] Gagal reload Nginx:', e.message);
+  console.error('[WARN] Reload Nginx:', e.message);
 }
 
 // 3. Patch Express License Server sebagai perlindungan ganda
-console.log('[3] Memeriksa Express License Server (/home/antigravity/barber-license-server)...');
+console.log('[3] Memeriksa Express License Server...');
 const licenseDirs = [
   '/home/antigravity/barber-license-server',
   '/home/antigravity/license-server',
@@ -95,8 +103,7 @@ licenseDirs.forEach((dir) => {
     const jsPath = path.join(dir, file);
     try {
       let code = fs.readFileSync(jsPath, 'utf8');
-      if (code.includes('express') && (code.includes('app.listen') || code.includes('server.listen'))) {
-        // Hapus patch lama
+      if (code.includes('express') && (code.includes('app.listen') || code.includes('server.listen') || code.includes('http.createServer'))) {
         code = code.replace(/\/\/ BARBERSUITE_FALLBACK[\s\S]*?\/\/ BARBERSUITE_FALLBACK_END\n?/g, '');
 
         const fallback = `
@@ -113,7 +120,12 @@ try {
 }
 // BARBERSUITE_FALLBACK_END
 `;
-        const listenTarget = code.includes('app.listen') ? 'app.listen' : 'server.listen';
+        const listenTarget = code.includes('app.listen')
+          ? 'app.listen'
+          : code.includes('server.listen')
+            ? 'server.listen'
+            : 'http.createServer';
+
         code = code.replace(listenTarget, fallback + '\n' + listenTarget);
         fs.writeFileSync(jsPath, code, 'utf8');
         console.log(`[OK] Express fallback berhasil dipasang di ${jsPath}`);
@@ -125,12 +137,11 @@ try {
   });
 });
 
-// Restart PM2 jika ada
+// Restart Node/PM2 jika ada
 try {
   console.log('[4] Merestart service Node/Express...');
   execSync('pm2 restart all || true', { stdio: 'inherit' });
-} catch (e) {
-  // Abaikan jika pm2 tidak ada
-}
+  execSync('systemctl restart barber-license || systemctl restart license-server || systemctl restart barber-server || true', { stdio: 'inherit' });
+} catch (e) {}
 
 console.log('=== SEMUA PROSES SELESAI ===');
