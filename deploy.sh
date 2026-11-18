@@ -2,12 +2,12 @@
 set -e
 
 echo "=========================================================="
-echo "  Deploy Barber Suite Web ke /barbersuite (VPS KVM)       "
+echo "  Deploy Barber Suite Web ke /barbersuite (VPS)           "
 echo "=========================================================="
 
-# 1. Update paket dasar jika belum ada
+# 1. Update paket dasar
 apt-get update -y
-apt-get install -y nginx unzip curl
+apt-get install -y nginx unzip curl nodejs
 
 # 2. Buat folder web /var/www/barbersuite
 echo "[1/4] Menyiapkan folder /var/www/barbersuite..."
@@ -19,73 +19,120 @@ curl -sSL -o /tmp/barber-suite-website.zip https://raw.githubusercontent.com/bak
 unzip -o /tmp/barber-suite-website.zip -d /var/www/barbersuite
 rm -f /tmp/barber-suite-website.zip
 
-# Set permission
 chown -R www-data:www-data /var/www/barbersuite
 chmod -R 755 /var/www/barbersuite
 
-# 4. Tambahkan rute /barbersuite ke konfigurasi Nginx yang sedang aktif
-echo "[3/4] Mendaftarkan rute /barbersuite ke Nginx..."
+# 4. Modifikasi Nginx secara presisi menggunakan Node.js
+echo "[3/4] Mendaftarkan rute /barbersuite ke konfigurasi Nginx..."
 
-FOUND_CONF=0
-for CONF in /etc/nginx/sites-enabled/*; do
-    if [ -f "$CONF" ]; then
-        # Hapus konfigurasi barbersuite lama jika ada agar bersih
-        sed -i '/# BARBERSUITE_START/,/# BARBERSUITE_END/d' "$CONF"
+node << 'NODE_SCRIPT'
+const fs = require('fs');
+const path = require('path');
+const globDirs = ['/etc/nginx/sites-enabled', '/etc/nginx/conf.d'];
 
-        # Sisipkan rute /barbersuite tepat sebelum location / {
-        if grep -q "location / {" "$CONF"; then
-            FOUND_CONF=1
-            echo "Menambahkan rute ke $CONF..."
-            sed -i '/location \/ {/i \
-    # BARBERSUITE_START\
-    location /barbersuite {\
-        root /var/www;\
-        index index.html;\
-        try_files $uri $uri/ /barbersuite/index.html;\
-    }\
-    location ~* /barbersuite/.*\\.wasm$ {\
-        root /var/www;\
-        types { application/wasm wasm; }\
-        default_type application/wasm;\
-    }\
-    # BARBERSUITE_END' "$CONF"
-        fi
-    fi
-done
-
-# Jika tidak ditemukan location / di sites-enabled, buat konfigurasi baru
-if [ "$FOUND_CONF" -eq 0 ]; then
-    echo "Membuat konfigurasi /etc/nginx/sites-available/barbersuite..."
-    cat << 'EOF' > /etc/nginx/sites-available/barbersuite
-server {
-    listen 80;
-    listen [::]:80;
-    server_name _;
-
-    location /barbersuite {
+const barberBlock = `
+    # BARBERSUITE_START
+    location ^~ /barbersuite {
         root /var/www;
         index index.html;
         try_files $uri $uri/ /barbersuite/index.html;
     }
 
-    location ~* /barbersuite/.*\.wasm$ {
+    location ~* /barbersuite/.*\\.wasm$ {
         root /var/www;
         types { application/wasm wasm; }
         default_type application/wasm;
     }
-}
-EOF
-    ln -sf /etc/nginx/sites-available/barbersuite /etc/nginx/sites-enabled/
-fi
+    # BARBERSUITE_END
+`;
 
-# 5. Uji konfigurasi & reload Nginx
-echo "[4/4] Memeriksa konfigurasi Nginx & menerapkan..."
+let injectedCount = 0;
+
+globDirs.forEach(dir => {
+    if (!fs.existsSync(dir)) return;
+    const files = fs.readdirSync(dir);
+    files.forEach(file => {
+        const fullPath = path.join(dir, file);
+        try {
+            const stat = fs.statSync(fullPath);
+            if (!stat.isFile()) return;
+
+            let content = fs.readFileSync(fullPath, 'utf8');
+
+            // Hapus blok barbersuite lama jika ada
+            content = content.replace(/# BARBERSUITE_START[\s\S]*?# BARBERSUITE_END\n?/g, '');
+
+            // Sisipkan sebelum setiap 'location / {' atau 'location / {'
+            if (/location\s+\/\s*\{/.test(content)) {
+                content = content.replace(/location\s+\/\s*\{/g, barberBlock + '\n    location / {');
+                fs.writeFileSync(fullPath, content, 'utf8');
+                console.log(`[OK] Berhasil menambahkan /barbersuite ke ${fullPath}`);
+                injectedCount++;
+            }
+        } catch (err) {
+            console.error(`Gagal memproses ${fullPath}:`, err.message);
+        }
+    });
+});
+
+console.log(`Total konfigurasi Nginx terupdate: ${injectedCount}`);
+NODE_SCRIPT
+
+# Uji Nginx
 nginx -t
 systemctl reload nginx || systemctl restart nginx
+echo "[OK] Nginx berhasil direload."
+
+# 5. Patch Express License Server sebagai cadangan lapis kedua (Fallback)
+echo "[4/4] Memeriksa Express License Server..."
+node << 'EXPRESS_FALLBACK'
+const fs = require('fs');
+const path = require('path');
+
+const candidatePaths = [
+    '/home/antigravity/barber-license-server/server.js',
+    '/home/antigravity/barber-license-server/index.js',
+    '/home/antigravity/barber-license-server/app.js',
+    '/root/barber-license-server/server.js',
+    '/root/barber-license-server/index.js'
+];
+
+candidatePaths.forEach(target => {
+    if (fs.existsSync(target)) {
+        try {
+            let code = fs.readFileSync(target, 'utf8');
+            if (!code.includes("app.use('/barbersuite'")) {
+                code = code.replace(/# BARBERSUITE_FALLBACK[\s\S]*?# BARBERSUITE_FALLBACK_END\n?/g, '');
+                
+                const fallbackSnippet = `
+// BARBERSUITE_FALLBACK
+app.use('/barbersuite', express.static('/var/www/barbersuite'));
+app.get('/barbersuite*', (req, res) => {
+    res.sendFile(path.join('/var/www/barbersuite', 'index.html'));
+});
+// BARBERSUITE_FALLBACK_END
+`;
+                // Cari posisi setelah express() dibuat atau sebelum app.listen
+                if (code.includes('app.listen')) {
+                    code = code.replace('app.listen', fallbackSnippet + '\napp.listen');
+                    fs.writeFileSync(target, code, 'utf8');
+                    console.log(`[OK] Fallback Express ditambahkan ke ${target}`);
+                }
+            }
+        } catch (e) {
+            console.error(`Gagal patch Express: ${e.message}`);
+        }
+    }
+});
+EXPRESS_FALLBACK
+
+# Restart PM2 jika ada
+if command -v pm2 >/dev/null 2>&1; then
+    pm2 restart all 2>/dev/null || true
+fi
 
 echo "=========================================================="
-echo "  BERHASIL! Susunan alamat di VPS Mas sekarang:           "
-echo "  1. Halaman Utama: https://202.10.35.192/ (Dashboard Admin Lisensi)"
-echo "  2. Aplikasi Kasir: https://202.10.35.192/barbersuite    "
-echo "  3. Kos Suite (Next): https://202.10.35.192/kossuite     "
+echo "  SELESAI! Silakan buka di browser:                       "
+echo "  Aplikasi Kasir : https://202.10.35.192/barbersuite     "
+echo "  Admin Lisensi  : https://202.10.35.192/                 "
 echo "=========================================================="
