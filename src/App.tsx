@@ -130,8 +130,13 @@ export function App({ onRetryBoot }: { onRetryBoot: () => void }) {
   const daysLeft = access.daysLeft ?? 14;
   const isCriticalTrial = daysLeft <= 3;
 
+  const basename =
+    typeof window !== 'undefined' && window.location.pathname.startsWith('/barbersuite')
+      ? '/barbersuite'
+      : '/';
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       {/* Trial reminder banner with prominent Activation button */}
       {access.isTrial && showTrialBanner && (
         <div

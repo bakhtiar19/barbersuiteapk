@@ -142,16 +142,16 @@ async function ensureJeepElement(): Promise<void> {
     return;
   }
   defineJeepSqlite(window);
+  const wasmPath =
+    window.location.pathname.startsWith('/barbersuite') ? '/barbersuite/assets' : '/assets';
   let el = document.querySelector('jeep-sqlite');
   if (!el) {
     el = document.createElement('jeep-sqlite');
     el.setAttribute('autoSave', 'true');
-    el.setAttribute('wasmPath', '/assets');
+    el.setAttribute('wasmPath', wasmPath);
     document.body.appendChild(el);
   } else {
-    if (!el.hasAttribute('wasmPath')) {
-      el.setAttribute('wasmPath', '/assets');
-    }
+    el.setAttribute('wasmPath', wasmPath);
     if (!el.hasAttribute('autoSave')) {
       el.setAttribute('autoSave', 'true');
     }
