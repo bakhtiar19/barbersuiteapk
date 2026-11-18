@@ -8,10 +8,11 @@ echo "=========================================================="
 apt-get update -y
 apt-get install -y nginx unzip curl nodejs
 
-# 2. Unduh bundle web dan skrip setup
+# 2. Unduh bundle web, skrip setup, dan admin dashboard
 echo "[1/3] Mengunduh bundle aplikasi dan file setup..."
 curl -sSL -o /tmp/barber-suite-website.zip https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/barber-suite-website.zip
 curl -sSL -o /tmp/setup-vps.js https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/setup-vps.js
+curl -sSL -o /tmp/admin.html https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/admin.html
 
 # 3. Ekstrak langsung dengan aman
 echo "[2/3] Mengekstrak file web..."
@@ -22,9 +23,9 @@ chown -R www-data:www-data /var/www/barbersuite 2>/dev/null || true
 chmod -R 755 /var/www/barbersuite
 
 # 4. Jalankan konfigurasi Nginx & Express via Node
-echo "[3/3] Menjalankan konfigurasi Nginx & Express..."
+echo "[3/3] Menjalankan konfigurasi Nginx & Central Admin Portal..."
 node /tmp/setup-vps.js
-rm -f /tmp/setup-vps.js
+rm -f /tmp/setup-vps.js /tmp/admin.html
 
 echo "=========================================================="
 echo "  SELESAI! Silakan buka di browser:                       "

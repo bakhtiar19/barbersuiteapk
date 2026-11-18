@@ -83,8 +83,8 @@ try {
   console.error('[WARN] Reload Nginx:', e.message);
 }
 
-// 3. Patch Express License Server sebagai perlindungan ganda
-console.log('[3] Memeriksa Express License Server...');
+// 3. Patch Express License Server & Pasang Central Admin Portal
+console.log('[3] Memeriksa Express License Server & Memperbarui Tampilan Admin Portal...');
 const licenseDirs = [
   '/home/antigravity/barber-license-server',
   '/home/antigravity/license-server',
@@ -92,17 +92,57 @@ const licenseDirs = [
   '/var/www/barber-license-server',
 ];
 
-let expressPatched = false;
+const newAdminHtmlPath = '/tmp/admin.html';
+let adminHtmlContent = '';
+if (fs.existsSync(newAdminHtmlPath)) {
+  adminHtmlContent = fs.readFileSync(newAdminHtmlPath, 'utf8');
+}
 
 licenseDirs.forEach((dir) => {
   if (!fs.existsSync(dir)) return;
   console.log(`Ditemukan folder backend: ${dir}`);
+
+  // Pasang admin.html jika ada folder public/views/root
+  if (adminHtmlContent) {
+    const possibleHtmlPaths = [
+      path.join(dir, 'public', 'index.html'),
+      path.join(dir, 'views', 'index.html'),
+      path.join(dir, 'index.html')
+    ];
+    possibleHtmlPaths.forEach(htmlPath => {
+      if (fs.existsSync(htmlPath)) {
+        fs.writeFileSync(htmlPath, adminHtmlContent, 'utf8');
+        console.log(`[OK] Tampilan Central Admin Portal terpasang di ${htmlPath}`);
+      }
+    });
+
+    // Simpan juga ke public/index.html jika folder public ada
+    const publicDir = path.join(dir, 'public');
+    if (fs.existsSync(publicDir)) {
+      fs.writeFileSync(path.join(publicDir, 'index.html'), adminHtmlContent, 'utf8');
+      console.log(`[OK] Memperbarui ${path.join(publicDir, 'index.html')}`);
+    }
+  }
 
   const jsFiles = fs.readdirSync(dir).filter((f) => f.endsWith('.js'));
   jsFiles.forEach((file) => {
     const jsPath = path.join(dir, file);
     try {
       let code = fs.readFileSync(jsPath, 'utf8');
+
+      // Jika HTML di-embed langsung di dalam file JS
+      if (adminHtmlContent && code.includes('Barber Suite - License & Trial Manager')) {
+        console.log(`[INFO] Menemukan inline HTML di ${jsPath}, mengganti dengan Central Admin Portal...`);
+        // Ganti inline string HTML jika ada
+        const startIndex = code.indexOf('<!DOCTYPE html>');
+        const endIndex = code.indexOf('</html>');
+        if (startIndex !== -1 && endIndex !== -1) {
+          code = code.substring(0, startIndex) + adminHtmlContent + code.substring(endIndex + 7);
+          fs.writeFileSync(jsPath, code, 'utf8');
+          console.log(`[OK] Inline HTML berhasil diperbarui di ${jsPath}`);
+        }
+      }
+
       if (code.includes('express') && (code.includes('app.listen') || code.includes('server.listen') || code.includes('http.createServer'))) {
         code = code.replace(/\/\/ BARBERSUITE_FALLBACK[\s\S]*?\/\/ BARBERSUITE_FALLBACK_END\n?/g, '');
 
@@ -129,7 +169,6 @@ try {
         code = code.replace(listenTarget, fallback + '\n' + listenTarget);
         fs.writeFileSync(jsPath, code, 'utf8');
         console.log(`[OK] Express fallback berhasil dipasang di ${jsPath}`);
-        expressPatched = true;
       }
     } catch (e) {
       console.log(`[SKIP] ${jsPath}: ${e.message}`);
