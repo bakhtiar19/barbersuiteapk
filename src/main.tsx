@@ -8,6 +8,7 @@ import { initDatabase } from '@/db/client';
 import { listBarbers } from '@/db/repositories/barberRepo';
 import { getAllSettings, updateSettings } from '@/db/repositories/settingsRepo';
 import { checkAndRunAutoBackupOnBoot } from '@/features/backup/backupService';
+import { disablePullToRefresh } from '@/platform/lifecycle';
 import { scheduleBackupReminder } from '@/platform/notifications';
 import { initPwaInstallListener } from '@/platform/pwaInstall';
 import { useSettingsStore } from '@/stores/settingsStore';
@@ -68,6 +69,7 @@ async function bootstrapApp() {
   }
 }
 
+disablePullToRefresh();
 initPwaInstallListener();
 void bootstrapApp();
 

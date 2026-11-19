@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Preferences } from '@capacitor/preferences';
 import { ToastContainer } from '@/components/ui/Toast';
 import { ErrorState } from '@/components/ui/EmptyState';
-import { PageSkeleton } from '@/components/ui/Skeleton';
+import { AppBootLoader } from '@/components/ui/Skeleton';
 import { PinLockScreen } from '@/features/settings/PinLockScreen';
 import { LicenseActivationScreen } from '@/features/settings/LicenseActivationScreen';
 import { checkAppAccess, AppAccessState } from '@/lib/license';
@@ -100,11 +100,7 @@ export function App({ onRetryBoot }: { onRetryBoot: () => void }) {
   }
 
   if (!isAppReady || !accessChecked) {
-    return (
-      <div className="mx-auto min-h-screen max-w-md p-6 pt-16">
-        <PageSkeleton />
-      </div>
-    );
+    return <AppBootLoader />;
   }
 
   // If trial has expired and no paid license -> Lock app with Activation Screen (no close option)

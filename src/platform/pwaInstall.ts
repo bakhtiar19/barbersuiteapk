@@ -8,6 +8,7 @@ export interface BeforeInstallPromptEvent extends Event {
 const DISMISS_STORAGE_KEY = 'barber_home_install_dismissed';
 
 let deferredPrompt: BeforeInstallPromptEvent | null = null;
+let appInstalled = false;
 let listenersInitialized = false;
 const subscribers = new Set<() => void>();
 
@@ -29,6 +30,7 @@ export function initPwaInstallListener(): void {
 
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
+    appInstalled = true;
     notifySubscribers();
   });
 }
@@ -53,7 +55,15 @@ export async function triggerPwaInstall(): Promise<'accepted' | 'dismissed' | 'u
 
   await promptEvent.prompt();
   const choice = await promptEvent.userChoice;
+  if (choice.outcome === 'accepted') {
+    appInstalled = true;
+    notifySubscribers();
+  }
   return choice.outcome;
+}
+
+export function isAppInstalled(): boolean {
+  return appInstalled || isRunningStandalone();
 }
 
 export function isRunningStandalone(): boolean {

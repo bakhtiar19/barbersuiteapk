@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   ChevronRight,
   DatabaseBackup,
@@ -11,8 +12,16 @@ import {
 import { Link } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { HomeScreenInstallGuideSheet } from '@/components/pwa/HomeScreenInstallGuideSheet';
 import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 import { getBackupReminderStatus } from '@/features/backup/backupService';
+import {
+  hasDeferredInstallPrompt,
+  isAppInstalled,
+  subscribePwaInstall,
+  triggerPwaInstall,
+} from '@/platform/pwaInstall';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useUiStore } from '@/stores/uiStore';
 
@@ -21,6 +30,34 @@ export function MorePage() {
   const backupStatus = getBackupReminderStatus(settings);
   const licenseStatus = useUiStore((s) => s.licenseStatus);
   const setLicenseModalOpen = useUiStore((s) => s.setLicenseModalOpen);
+  const showToast = useUiStore((s) => s.showToast);
+
+  const [installed, setInstalled] = useState(() => isAppInstalled());
+  const [canPrompt, setCanPrompt] = useState(() => hasDeferredInstallPrompt());
+  const [guideOpen, setGuideOpen] = useState(false);
+
+  useEffect(() => {
+    const syncInstallState = () => {
+      setInstalled(isAppInstalled());
+      setCanPrompt(hasDeferredInstallPrompt());
+    };
+
+    syncInstallState();
+    return subscribePwaInstall(syncInstallState);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (canPrompt) {
+      const outcome = await triggerPwaInstall();
+      if (outcome === 'accepted') {
+        setInstalled(true);
+        showToast('Barber Suite ditambahkan ke layar utama.', 'success');
+        return;
+      }
+      if (outcome === 'dismissed') return;
+    }
+    setGuideOpen(true);
+  };
 
   const groups = [
     {
@@ -122,19 +159,25 @@ export function MorePage() {
           </section>
         ))}
 
-        <div className="flex gap-3 rounded-2xl bg-stone-200/50 p-4">
-          <Smartphone className="mt-0.5 h-4 w-4 shrink-0 text-brand-700" />
-          <p className="text-xs leading-relaxed text-ink/80">
-            <strong className="text-brand-900">Pasang di layar utama.</strong> Android: menu ⋮ →
-            Tambahkan ke layar utama. iPhone: Bagikan → Add to Home Screen.
-          </p>
-        </div>
+        {!installed && (
+          <Button
+            variant="secondary"
+            fullWidth
+            size="md"
+            leftIcon={<Smartphone className="h-[18px] w-[18px] text-amber-400" />}
+            onClick={() => void handleInstallClick()}
+          >
+            Pasang Aplikasi di Layar Utama
+          </Button>
+        )}
 
         <div className="pt-1 text-center">
           <p className="text-xs font-semibold text-stone-500">Barber Suite v4.2.0</p>
           <p className="text-[11px] text-stone-400">by Kriakarya 2026</p>
         </div>
       </div>
+
+      <HomeScreenInstallGuideSheet open={guideOpen} onClose={() => setGuideOpen(false)} />
     </AppShell>
   );
 }

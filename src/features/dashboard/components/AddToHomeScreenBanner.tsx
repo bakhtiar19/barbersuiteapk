@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
-import { MoreVertical, Share, Smartphone, X } from 'lucide-react';
+import { Smartphone, X } from 'lucide-react';
+import { HomeScreenInstallGuideSheet } from '@/components/pwa/HomeScreenInstallGuideSheet';
 import { Button } from '@/components/ui/Button';
-import { BottomSheet } from '@/components/ui/Modal';
 import {
   dismissHomeInstallBanner,
   hasDeferredInstallPrompt,
+  isAppInstalled,
   isHomeInstallDismissed,
-  isIosDevice,
-  isRunningStandalone,
   subscribePwaInstall,
   triggerPwaInstall,
 } from '@/platform/pwaInstall';
@@ -21,14 +20,14 @@ export function AddToHomeScreenBanner() {
   const showToast = useUiStore((s) => s.showToast);
 
   const [hidden, setHidden] = useState(
-    () => isRunningStandalone() || isHomeInstallDismissed(),
+    () => isAppInstalled() || isHomeInstallDismissed(),
   );
   const [canPrompt, setCanPrompt] = useState(() => hasDeferredInstallPrompt());
   const [guideOpen, setGuideOpen] = useState(false);
 
   useEffect(() => {
     const syncState = () => {
-      if (isRunningStandalone()) {
+      if (isAppInstalled()) {
         setHidden(true);
         return;
       }
@@ -40,8 +39,6 @@ export function AddToHomeScreenBanner() {
   }, []);
 
   if (hidden) return null;
-
-  const isIos = isIosDevice();
 
   const handleDismiss = () => {
     dismissHomeInstallBanner();
@@ -61,43 +58,6 @@ export function AddToHomeScreenBanner() {
 
     setGuideOpen(true);
   };
-
-  const androidSteps = (
-    <div className="rounded-xl border border-stone-200 bg-stone-50 p-3.5 space-y-1.5">
-      <p className="text-xs font-bold text-brand-900">Android (Chrome)</p>
-      <ol className="list-decimal space-y-1 pl-4 text-xs text-ink/80">
-        <li>
-          Ketuk ikon menu <MoreVertical className="inline h-3.5 w-3.5 align-text-bottom" /> di pojok
-          kanan atas browser.
-        </li>
-        <li>
-          Pilih <strong>Tambahkan ke layar utama</strong> (<em>Add to Home screen</em>).
-        </li>
-        <li>
-          Ketuk <strong>Tambahkan</strong> / <strong>Pasang</strong> untuk konfirmasi.
-        </li>
-      </ol>
-    </div>
-  );
-
-  const iosSteps = (
-    <div className="rounded-xl border border-stone-200 bg-stone-50 p-3.5 space-y-1.5">
-      <p className="text-xs font-bold text-brand-900">iPhone / iPad (Safari)</p>
-      <ol className="list-decimal space-y-1 pl-4 text-xs text-ink/80">
-        <li>
-          Ketuk ikon <strong>Bagikan</strong>{' '}
-          <Share className="inline h-3.5 w-3.5 align-text-bottom" /> di bilah browser Safari.
-        </li>
-        <li>
-          Gulir ke bawah lalu pilih <strong>Tambahkan ke Layar Utama</strong> (
-          <em>Add to Home Screen</em>).
-        </li>
-        <li>
-          Ketuk <strong>Tambah</strong> di pojok kanan atas.
-        </li>
-      </ol>
-    </div>
-  );
 
   return (
     <>
@@ -135,34 +95,7 @@ export function AddToHomeScreenBanner() {
         </div>
       </div>
 
-      <BottomSheet
-        open={guideOpen}
-        onClose={() => setGuideOpen(false)}
-        title="Tambahkan ke Layar Utama"
-      >
-        <div className="space-y-3">
-          <p className="text-xs leading-relaxed text-muted">
-            Pasang pintasan <strong>Barber Suite</strong> di layar utama HP agar bisa dibuka seperti
-            aplikasi dengan akses lebih cepat.
-          </p>
-
-          {isIos ? (
-            <>
-              {iosSteps}
-              {androidSteps}
-            </>
-          ) : (
-            <>
-              {androidSteps}
-              {iosSteps}
-            </>
-          )}
-
-          <Button variant="secondary" fullWidth onClick={() => setGuideOpen(false)}>
-            Mengerti
-          </Button>
-        </div>
-      </BottomSheet>
+      <HomeScreenInstallGuideSheet open={guideOpen} onClose={() => setGuideOpen(false)} />
     </>
   );
 }
