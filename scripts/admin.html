@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kriakarya Suite - Central Administrator Portal</title>
+  <title>Barber Suite - License & Trial Admin Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -16,21 +16,21 @@
   <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-30 shadow-md">
     <div class="flex items-center space-x-3.5">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center font-bold text-slate-950 text-xl shadow-lg shadow-amber-500/20">
-        <i class="fa-solid fa-layer-group"></i>
+        <i class="fa-solid fa-scissors"></i>
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <h1 class="text-lg font-extrabold tracking-tight text-white">Kriakarya Suite</h1>
-          <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Central Admin</span>
+          <h1 class="text-lg font-extrabold tracking-tight text-white">Barber Suite</h1>
+          <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Admin Portal</span>
         </div>
-        <p class="text-xs text-slate-400 font-medium">Multi-App Credential, License & Service Management</p>
+        <p class="text-xs text-slate-400 font-medium">Manajemen Lisensi Klien, Kuota Perangkat & 14-Day Trial</p>
       </div>
     </div>
     <div id="authStatus" class="flex items-center space-x-3">
-      <a href="/barbersuite" target="_blank" class="hidden sm:flex items-center gap-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-amber-400 px-3 py-1.5 rounded-lg border border-slate-700 transition">
-        <i class="fa-solid fa-scissors"></i> Buka Barber Kasir <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5 opacity-70"></i>
+      <a href="https://barbersuite.site" target="_blank" class="hidden sm:flex items-center gap-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-amber-400 px-3.5 py-2 rounded-xl border border-slate-700 transition font-semibold">
+        <i class="fa-solid fa-scissors"></i> Buka Aplikasi Kasir <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5 opacity-70"></i>
       </a>
-      <button onclick="logout()" id="btnLogout" class="hidden text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700 transition text-rose-300">
+      <button onclick="logout()" id="btnLogout" class="hidden text-xs bg-slate-800 hover:bg-slate-700 px-3.5 py-2 rounded-xl border border-slate-700 transition text-rose-300 font-semibold">
         <i class="fa-solid fa-right-from-bracket mr-1"></i> Keluar
       </button>
     </div>
@@ -44,13 +44,13 @@
         <div class="w-16 h-16 bg-gradient-to-tr from-amber-500/20 to-amber-400/10 text-amber-400 border border-amber-500/30 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-3 shadow-inner">
           <i class="fa-solid fa-shield-halved"></i>
         </div>
-        <h2 class="text-xl font-bold text-white">Central Admin Login</h2>
-        <p class="text-sm text-slate-400 mt-1">Masukkan Kunci Master Admin untuk mengelola semua aplikasi</p>
+        <h2 class="text-xl font-bold text-white">Autentikasi Administrator</h2>
+        <p class="text-sm text-slate-400 mt-1">Masukkan Admin Key untuk mengelola lisensi Barber Suite</p>
       </div>
       <form onsubmit="handleLogin(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Master Admin Key</label>
-          <input type="password" id="adminKeyInput" required placeholder="Ketik Master Admin Key..." 
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Admin API Key</label>
+          <input type="password" id="adminKeyInput" required placeholder="Masukkan Admin Key..." 
             class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition text-sm">
         </div>
         <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl shadow-lg shadow-amber-500/20 transition flex items-center justify-center space-x-2 text-sm">
@@ -63,73 +63,26 @@
     <!-- Dashboard Content -->
     <div id="dashboardSection" class="hidden space-y-8">
       
-      <!-- App Catalog / Quick Launcher -->
-      <div>
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Aplikasi Terdaftar di VPS Ini</h2>
-          <span class="text-[11px] text-slate-500">Kapasitas VPS: Siap hingga 20+ aplikasi</span>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Barber Suite Card -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg relative overflow-hidden group hover:border-amber-500/40 transition">
-            <div class="flex items-start justify-between">
-              <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center justify-center text-xl font-bold">
-                  <i class="fa-solid fa-scissors"></i>
-                </div>
-                <div>
-                  <h3 class="font-bold text-white text-base">Barber Suite</h3>
-                  <span class="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-semibold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Online / Aktif
-                  </span>
-                </div>
-              </div>
-              <span class="text-xs bg-slate-800 px-2 py-1 rounded-md text-slate-400 font-mono">v4.2.0</span>
-            </div>
-            <p class="text-xs text-slate-400 mt-3">Aplikasi POS Kasir Barbershop, PWA Web & Android Release APK.</p>
-            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-              <span class="text-[11px] text-slate-500 font-mono">/barbersuite</span>
-              <a href="/barbersuite" target="_blank" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs transition flex items-center gap-1 shadow-sm">
-                <span>Buka Kasir</span>
-                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-              </a>
-            </div>
+      <!-- App Status Banner -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/30 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center space-x-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-scissors"></i>
           </div>
-
-          <!-- Kos Suite Card -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg relative overflow-hidden group hover:border-indigo-500/40 transition">
-            <div class="flex items-start justify-between">
-              <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-xl font-bold">
-                  <i class="fa-solid fa-house-chimney-user"></i>
-                </div>
-                <div>
-                  <h3 class="font-bold text-white text-base">Kos Suite</h3>
-                  <span class="inline-flex items-center gap-1 text-[11px] text-indigo-400 font-semibold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span> Siap Dideploy
-                  </span>
-                </div>
-              </div>
-              <span class="text-xs bg-slate-800 px-2 py-1 rounded-md text-slate-400 font-mono">Upcoming</span>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-white text-base">Barber Suite v4.2.0</h3>
+              <span class="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Online & Terenkripsi SSL
+              </span>
             </div>
-            <p class="text-xs text-slate-400 mt-3">Sistem Manajemen Kamar Kos, Tagihan Sewa & Data Penghuni.</p>
-            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-              <span class="text-[11px] text-slate-500 font-mono">/kossuite</span>
-              <button onclick="alert('Aplikasi Kos Suite siap di-deploy ke folder /var/www/kossuite!')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium px-3 py-1.5 rounded-lg text-xs transition">
-                Jalur Siap
-              </button>
-            </div>
-          </div>
-
-          <!-- Add Application Slot -->
-          <div class="bg-slate-900/40 border border-dashed border-slate-800 rounded-2xl p-5 flex flex-col justify-center items-center text-center hover:border-slate-700 transition">
-            <div class="w-10 h-10 rounded-xl bg-slate-800 text-slate-400 flex items-center justify-center text-lg mb-2">
-              <i class="fa-solid fa-plus"></i>
-            </div>
-            <h4 class="font-bold text-slate-300 text-sm">Tambah Aplikasi Baru</h4>
-            <p class="text-xs text-slate-500 mt-1 max-w-[200px]">Retail Suite, Resto Suite, Laundry Suite, atau aplikasi lainnya.</p>
+            <p class="text-xs text-slate-400 mt-1">Website Kasir Utama: <a href="https://barbersuite.site" target="_blank" class="text-amber-400 font-mono hover:underline">https://barbersuite.site</a></p>
           </div>
         </div>
+        <a href="https://barbersuite.site" target="_blank" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow-md shadow-amber-500/20 shrink-0">
+          <span>Buka Website Kasir</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+        </a>
       </div>
 
       <!-- Stats Cards -->
@@ -143,7 +96,7 @@
         </div>
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
           <div class="flex items-center justify-between text-slate-400 mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider">Perangkat Berbayar</span>
+            <span class="text-xs font-semibold uppercase tracking-wider">Perangkat Terikat</span>
             <i class="fa-solid fa-mobile-screen-button text-cyan-400"></i>
           </div>
           <div id="statBound" class="text-3xl font-extrabold text-cyan-400">0</div>
@@ -168,33 +121,31 @@
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 class="text-xl font-bold text-white">Kredensial & Lisensi Multi-Aplikasi</h2>
-            <p class="text-xs text-slate-400 mt-0.5">Kelola kunci aktivasi untuk Barber Suite, Kos Suite, dan aplikasi lainnya</p>
+            <h2 class="text-xl font-bold text-white">Kredensial & Lisensi Barber Suite</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Kelola lisensi untuk outlet, owner, atau klien barbershop Mas</p>
           </div>
           <div class="flex items-center gap-3">
             <button onclick="openModalCreate()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-amber-500/20 transition flex items-center space-x-2 text-sm">
               <i class="fa-solid fa-plus"></i>
-              <span>Buat Lisensi / Kredensial Baru</span>
+              <span>Buat Lisensi Baru</span>
             </button>
           </div>
         </div>
 
         <!-- Filter Tabs -->
-        <div class="flex items-center gap-2 border-b border-slate-800 pb-3 overflow-x-auto text-xs">
-          <span class="text-slate-400 font-medium mr-1">Filter Aplikasi:</span>
-          <button onclick="filterApp('all')" id="tabFilterAll" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition">Semua</button>
-          <button onclick="filterApp('barber')" id="tabFilterBarber" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition">💈 Barber Suite</button>
-          <button onclick="filterApp('kos')" id="tabFilterKos" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition">🏠 Kos Suite</button>
-          <button onclick="filterApp('other')" id="tabFilterOther" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition">Lainnya</button>
+        <div class="flex items-center gap-2 border-b border-slate-800 pb-3 text-xs">
+          <span class="text-slate-400 font-medium mr-1">Status:</span>
+          <button onclick="filterStatus('all')" id="tabFilterAll" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition">Semua</button>
+          <button onclick="filterStatus('active')" id="tabFilterActive" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition">Aktif</button>
+          <button onclick="filterStatus('inactive')" id="tabFilterInactive" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition">Nonaktif</button>
         </div>
 
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm border-collapse">
             <thead>
               <tr class="border-b border-slate-800 text-xs uppercase tracking-wider text-slate-400 bg-slate-950/40">
-                <th class="py-3.5 px-4 font-semibold">Aplikasi</th>
                 <th class="py-3.5 px-4 font-semibold">Kredensial / License Key</th>
-                <th class="py-3.5 px-4 font-semibold">Nama Klien / Paket</th>
+                <th class="py-3.5 px-4 font-semibold">Nama Barbershop / Klien</th>
                 <th class="py-3.5 px-4 font-semibold">Status</th>
                 <th class="py-3.5 px-4 font-semibold">Kuota Perangkat</th>
                 <th class="py-3.5 px-4 font-semibold">Masa Berlaku</th>
@@ -203,7 +154,7 @@
             </thead>
             <tbody id="licenseTableBody" class="divide-y divide-slate-800/60">
               <tr>
-                <td colspan="7" class="py-8 text-center text-slate-500">Memuat data lisensi...</td>
+                <td colspan="6" class="py-8 text-center text-slate-500">Memuat data lisensi...</td>
               </tr>
             </tbody>
           </table>
@@ -218,7 +169,7 @@
               <i class="fa-solid fa-hourglass-half text-amber-400"></i>
               <span>Daftar Perangkat dalam Masa Uji Coba Gratis (14 Hari)</span>
             </h3>
-            <p class="text-xs text-slate-400 mt-0.5">Perangkat yang baru pertama kali mengunduh & membuka aplikasi. Terkunci otomatis setelah 14 hari.</p>
+            <p class="text-xs text-slate-400 mt-0.5">Perangkat yang baru pertama kali membuka aplikasi. Terkunci otomatis setelah 14 hari jika belum membeli lisensi.</p>
           </div>
           <button onclick="loadTrials()" class="text-xs text-amber-400 hover:underline">Refresh</button>
         </div>
@@ -247,23 +198,13 @@
   <div id="modalCreate" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-        <h3 class="font-bold text-white text-lg">Buat Kredensial / Lisensi Baru</h3>
+        <h3 class="font-bold text-white text-lg">Buat Lisensi Barber Suite Baru</h3>
         <button onclick="closeModalCreate()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
       <form onsubmit="handleCreateLicense(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Target Aplikasi</label>
-          <select id="appTargetInput" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-amber-500 transition text-sm">
-            <option value="[Barber Suite]">💈 Barber Suite</option>
-            <option value="[Kos Suite]">🏠 Kos Suite</option>
-            <option value="[Retail Suite]">🛍️ Retail Suite</option>
-            <option value="[Universal]">🌐 Universal (Semua Aplikasi)</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Nama Klien / Cabang / Paket</label>
-          <input type="text" id="clientNameInput" required placeholder="Contoh: Barbershop Kemang (atau Paket VIP)"
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Nama Barbershop / Klien / Cabang</label>
+          <input type="text" id="clientNameInput" required placeholder="Contoh: Barbershop Kemang (atau Cabang BSD)"
             class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition text-sm">
         </div>
 
@@ -271,17 +212,17 @@
           <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Kustom Kunci Lisensi (Opsional)</label>
           <input type="text" id="customKeyInput" placeholder="Kosongkan untuk auto-generate (atau misal: BARBER-VIP-2026)"
             class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition text-sm font-mono uppercase">
-          <p class="text-[11px] text-slate-500 mt-1">Jika diisi, Anda bisa membagikan kata kunci ini ke klien.</p>
+          <p class="text-[11px] text-slate-500 mt-1">Jika diisi, kata kunci ini yang dimasukkan klien di menu Aktivasi Lisensi.</p>
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Kapasitas Kuota Perangkat</label>
           <select id="maxDevicesInput" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-amber-500 transition text-sm">
-            <option value="1">1 Perangkat (Kunci 1 HP saja)</option>
+            <option value="1">1 Perangkat (Kunci 1 HP/Tablet)</option>
             <option value="3">3 Perangkat (Paket 3 HP/Tablet)</option>
             <option value="5">5 Perangkat (Paket 5 HP/Tablet)</option>
-            <option value="10">10 Perangkat</option>
-            <option value="50">50 Perangkat (Bisa di-share ke 50 klien)</option>
+            <option value="10">10 Perangkat (Cabang Besar)</option>
+            <option value="50">50 Perangkat (Multi-Cabang)</option>
             <option value="9999">Unlimited / Tanpa Batas Perangkat</option>
           </select>
         </div>
@@ -301,13 +242,13 @@
   </div>
 
   <footer class="border-t border-slate-900 py-4 px-6 text-center text-xs text-slate-500">
-    Kriakarya Suite Central Admin &copy; 2026 &bull; Multi-App Architecture on KVM VPS
+    Barber Suite License & Trial Engine &copy; 2026 &bull; Dedicated Domain Management
   </footer>
 
   <script>
     let adminKey = localStorage.getItem('barber_admin_key') || '';
     let allLicensesData = [];
-    let currentFilter = 'all';
+    let currentStatusFilter = 'all';
 
     function checkAuth() {
       if (adminKey) {
@@ -365,17 +306,16 @@
       return await res.json();
     }
 
-    function filterApp(type) {
-      currentFilter = type;
-      ['tabFilterAll', 'tabFilterBarber', 'tabFilterKos', 'tabFilterOther'].forEach(id => {
+    function filterStatus(status) {
+      currentStatusFilter = status;
+      ['tabFilterAll', 'tabFilterActive', 'tabFilterInactive'].forEach(id => {
         const el = document.getElementById(id);
         el.className = 'px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition';
       });
 
-      if (type === 'all') document.getElementById('tabFilterAll').className = 'px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition';
-      if (type === 'barber') document.getElementById('tabFilterBarber').className = 'px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition';
-      if (type === 'kos') document.getElementById('tabFilterKos').className = 'px-3 py-1.5 rounded-lg bg-indigo-500 text-white font-bold transition';
-      if (type === 'other') document.getElementById('tabFilterOther').className = 'px-3 py-1.5 rounded-lg bg-cyan-500 text-slate-950 font-bold transition';
+      if (status === 'all') document.getElementById('tabFilterAll').className = 'px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition';
+      if (status === 'active') document.getElementById('tabFilterActive').className = 'px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition';
+      if (status === 'inactive') document.getElementById('tabFilterInactive').className = 'px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition';
 
       renderLicensesTable();
     }
@@ -387,7 +327,6 @@
 
         allLicensesData = data.licenses || [];
 
-        // Hitung total bound
         const totalBound = allLicensesData.reduce((acc, curr) => acc + (curr.bound_count || 0), 0);
         document.getElementById('statTotal').innerText = allLicensesData.length;
         document.getElementById('statBound').innerText = totalBound;
@@ -401,21 +340,19 @@
     function renderLicensesTable() {
       const tbody = document.getElementById('licenseTableBody');
       if (allLicensesData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-500">Belum ada kredensial lisensi dibuat.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-500">Belum ada kredensial lisensi dibuat.</td></tr>`;
         return;
       }
 
       let filtered = allLicensesData;
-      if (currentFilter === 'barber') {
-        filtered = allLicensesData.filter(l => (l.client_name || '').toLowerCase().includes('barber') || !(l.client_name || '').includes('['));
-      } else if (currentFilter === 'kos') {
-        filtered = allLicensesData.filter(l => (l.client_name || '').toLowerCase().includes('kos'));
-      } else if (currentFilter === 'other') {
-        filtered = allLicensesData.filter(l => !(l.client_name || '').toLowerCase().includes('barber') && !(l.client_name || '').toLowerCase().includes('kos'));
+      if (currentStatusFilter === 'active') {
+        filtered = allLicensesData.filter(l => l.status === 'active');
+      } else if (currentStatusFilter === 'inactive') {
+        filtered = allLicensesData.filter(l => l.status !== 'active');
       }
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-500">Tidak ada lisensi pada filter ini.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-500">Tidak ada lisensi pada filter ini.</td></tr>`;
         return;
       }
 
@@ -424,21 +361,7 @@
         const quotaText = lic.max_devices >= 9999 ? `${lic.bound_count} / ∞ (Unlimited)` : `${lic.bound_count} / ${lic.max_devices} HP`;
         const expiryText = lic.expires_at ? new Date(lic.expires_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Selamanya (Lifetime)';
         
-        let appBadge = `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full">💈 Barber Suite</span>`;
-        let clientDisplayName = lic.client_name || '-';
-
-        if (clientDisplayName.includes('[Kos Suite]')) {
-          appBadge = `<span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full">🏠 Kos Suite</span>`;
-          clientDisplayName = clientDisplayName.replace('[Kos Suite]', '').trim();
-        } else if (clientDisplayName.includes('[Retail Suite]')) {
-          appBadge = `<span class="bg-purple-500/10 text-purple-400 border border-purple-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full">🛍️ Retail Suite</span>`;
-          clientDisplayName = clientDisplayName.replace('[Retail Suite]', '').trim();
-        } else if (clientDisplayName.includes('[Universal]')) {
-          appBadge = `<span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full">🌐 Universal</span>`;
-          clientDisplayName = clientDisplayName.replace('[Universal]', '').trim();
-        } else if (clientDisplayName.includes('[Barber Suite]')) {
-          clientDisplayName = clientDisplayName.replace('[Barber Suite]', '').trim();
-        }
+        let clientDisplayName = (lic.client_name || '-').replace(/\[.*?\]/g, '').trim() || lic.client_name;
 
         const devicesList = lic.devices && lic.devices.length > 0 
           ? `<div class="mt-1 text-[11px] text-slate-400 space-y-0.5">${lic.devices.map(d => `<div>&bull; ${escapeHtml(d.device_name || 'HP')} (${d.device_id.substring(0,8)}...)</div>`).join('')}</div>`
@@ -446,7 +369,6 @@
 
         return `
           <tr class="hover:bg-slate-900/40 transition">
-            <td class="py-4 px-4 whitespace-nowrap">${appBadge}</td>
             <td class="py-4 px-4 font-mono font-bold text-amber-400 text-sm select-all">
               <span class="cursor-pointer hover:underline" onclick="copyToClipboard('${lic.license_key}')" title="Klik untuk salin">${lic.license_key}</span>
             </td>
@@ -526,9 +448,7 @@
 
     async function handleCreateLicense(e) {
       e.preventDefault();
-      const app_target = document.getElementById('appTargetInput').value;
-      const raw_name = document.getElementById('clientNameInput').value.trim();
-      const client_name = `${app_target} ${raw_name}`;
+      const client_name = document.getElementById('clientNameInput').value.trim();
       const custom_key = document.getElementById('customKeyInput').value || null;
       const max_devices = document.getElementById('maxDevicesInput').value;
       const expires_at = document.getElementById('expiresAtInput').value || null;
@@ -540,7 +460,7 @@
           document.getElementById('clientNameInput').value = '';
           document.getElementById('customKeyInput').value = '';
           document.getElementById('expiresAtInput').value = '';
-          alert(`Lisensi Berhasil Dibuat!\nAplikasi: ${app_target}\nKunci: ${res.license.license_key}\nKuota: ${res.license.max_devices} Perangkat`);
+          alert(`Lisensi Berhasil Dibuat!\nKlien: ${client_name}\nKunci: ${res.license.license_key}\nKuota: ${res.license.max_devices} Perangkat`);
           loadLicenses();
         }
       } catch (err) {
