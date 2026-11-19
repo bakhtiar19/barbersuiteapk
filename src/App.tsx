@@ -11,7 +11,7 @@ import { subscribeToAppBackground } from '@/platform/lifecycle';
 import { AppRoutes } from '@/routes';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useUiStore } from '@/stores/uiStore';
-import { AlertCircle, KeyRound, Sparkles, X } from 'lucide-react';
+import { AlertCircle, KeyRound, X } from 'lucide-react';
 
 const TRIAL_FIRST_SEEN_KEY = 'barber_trial_banner_first_seen';
 
@@ -137,51 +137,58 @@ export function App({ onRetryBoot }: { onRetryBoot: () => void }) {
 
   return (
     <BrowserRouter basename={basename}>
-      {/* Trial reminder banner with prominent Activation button */}
+      {/* Trial reminder banner */}
       {access.isTrial && showTrialBanner && (
         <div
           className={`${
             isCriticalTrial
-              ? 'border-b border-rose-700/30 bg-gradient-to-r from-rose-600 via-amber-600 to-rose-600 text-white shadow-lg'
-              : 'border-b border-amber-600/20 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-brand-950 shadow-md'
-          } sticky top-0 z-50 flex items-center justify-between px-3.5 py-2.5 text-xs font-semibold transition-all`}
+              ? 'border-b border-rose-700/30 bg-gradient-to-r from-rose-600 via-amber-600 to-rose-600 px-3.5 py-2.5 font-semibold text-white shadow-lg'
+              : 'border-b border-gray-200 bg-gray-100 px-3.5 py-2 font-medium text-gray-600'
+          } sticky top-0 z-50 flex items-center justify-between gap-2 text-xs transition-all`}
         >
-          <div className="flex min-w-0 items-center gap-2 pr-2">
-            {isCriticalTrial ? (
-              <AlertCircle className="h-4 w-4 shrink-0 text-white animate-pulse" />
-            ) : (
-              <Sparkles className="h-4 w-4 shrink-0 text-brand-900" />
+          <div
+            className={`flex min-w-0 items-center gap-2 ${
+              isCriticalTrial ? '' : 'flex-1 justify-center pl-5 text-center'
+            }`}
+          >
+            {isCriticalTrial && (
+              <AlertCircle className="h-4 w-4 shrink-0 animate-pulse text-white" />
             )}
-            <span className="truncate text-xs font-medium">
+            <span
+              className={
+                isCriticalTrial
+                  ? 'truncate text-xs font-medium'
+                  : 'text-[11px] leading-snug text-gray-600 sm:text-xs'
+              }
+            >
               {isCriticalTrial
-                ? (daysLeft <= 0
-                    ? 'Hari Terakhir Uji Coba: Berakhir Hari Ini!'
-                    : `Masa Uji Coba Segera Berakhir: Sisa ${daysLeft} hari lagi!`)
-                : `Masa Uji Coba: Sisa ${daysLeft} hari lagi`}
+                ? daysLeft <= 0
+                  ? 'Hari Terakhir Uji Coba: Berakhir Hari Ini!'
+                  : `Masa Uji Coba Segera Berakhir: Sisa ${daysLeft} hari lagi!`
+                : 'Coba GRATIS 14 hari — tanpa biaya & komitmen di awal'}
             </span>
           </div>
-          <div className="flex shrink-0 items-center gap-2">
-            <button
-              onClick={() => setLicenseModalOpen(true)}
-              className={`${
-                isCriticalTrial
-                  ? 'border border-white bg-white text-rose-700 shadow-xl hover:bg-rose-50 animate-pulse'
-                  : 'border border-white/70 bg-brand-950 text-amber-300 shadow-md hover:bg-brand-900'
-              } flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-extrabold transition-all hover:scale-105 active:scale-95`}
-            >
-              <KeyRound className={`h-3.5 w-3.5 ${isCriticalTrial ? 'text-rose-600' : 'text-amber-400'}`} />
-              <span>Aktivasi Sekarang</span>
-            </button>
+          <div className="flex shrink-0 items-center gap-1.5">
+            {isCriticalTrial && (
+              <button
+                onClick={() => setLicenseModalOpen(true)}
+                className="flex animate-pulse items-center gap-1.5 rounded-xl border border-white bg-white px-3 py-1.5 text-xs font-extrabold text-rose-700 shadow-xl transition-all hover:scale-105 hover:bg-rose-50 active:scale-95"
+              >
+                <KeyRound className="h-3.5 w-3.5 text-rose-600" />
+                <span>Aktivasi Sekarang</span>
+              </button>
+            )}
             <button
               onClick={() => setShowTrialBanner(false)}
               className={`rounded-lg p-1 transition ${
                 isCriticalTrial
                   ? 'text-white/80 hover:bg-white/20 hover:text-white'
-                  : 'text-brand-950/70 hover:bg-black/10 hover:text-brand-950'
+                  : 'text-gray-400 hover:bg-gray-200/70 hover:text-gray-600'
               }`}
               title="Tutup banner sesi ini"
+              aria-label="Tutup banner"
             >
-              <X className="h-4 w-4" />
+              <X className={isCriticalTrial ? 'h-4 w-4' : 'h-3.5 w-3.5'} />
             </button>
           </div>
         </div>

@@ -12,6 +12,7 @@ import {
   getMonthlyRevenueSeries,
 } from '@/db/repositories/reportQueries';
 import { listTransactions } from '@/db/repositories/transactionRepo';
+import { AddToHomeScreenBanner } from '@/features/dashboard/components/AddToHomeScreenBanner';
 import { BackupStatusBanner } from '@/features/dashboard/components/BackupStatusBanner';
 import { RevenueChart } from '@/features/dashboard/components/RevenueChart';
 import { TransactionListItem } from '@/features/dashboard/components/TransactionListItem';
@@ -135,6 +136,7 @@ export function DashboardPage() {
       </header>
 
       <div className="mx-auto max-w-5xl space-y-4 px-4 py-4">
+        <AddToHomeScreenBanner />
         <BackupStatusBanner />
 
         {!loading && error && <ErrorState message={error} onRetry={loadData} />}
