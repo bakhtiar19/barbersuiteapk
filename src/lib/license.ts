@@ -9,6 +9,8 @@ const DEVICE_ID_KEY = 'barber_device_id';
 const CANDIDATE_SERVERS = [
   (import.meta.env.VITE_LICENSE_SERVER_URL as string | undefined),
   '', // Same origin relative path (untuk reverse proxy web hosting / Vercel / Nginx)
+  'https://barbersuite.site',
+  'https://admin.barbersuite.site',
   'https://202.10.35.192',
   'http://202.10.35.192',
 ].filter((s) => s !== undefined && s !== null) as string[];
