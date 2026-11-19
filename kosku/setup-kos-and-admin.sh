@@ -5,12 +5,9 @@ echo "=========================================================="
 echo "  Setup kossuite.site & admin.kossuite.site               "
 echo "=========================================================="
 
-# 1. Deteksi Port Node.js backend
-NODE_PORT=$(ss -tulpn 2>/dev/null | grep -E "node" | grep -oP ':\K[0-9]+' | head -n 1)
-if [ -z "$NODE_PORT" ]; then
-    NODE_PORT=3000
-fi
-echo ">> Backend terdeteksi pada port: $NODE_PORT"
+# 1. Port Node.js Kos Suite backend (Port 3001 agar berdampingan damai dengan Barber di Port 3000)
+NODE_PORT=3001
+echo ">> Kos Suite Backend dikonfigurasi pada port: $NODE_PORT"
 
 # 2. Konfigurasi kossuite.site (Aplikasi Manajemen Kos Suite)
 echo ">> Menyiapkan konfigurasi Nginx untuk kossuite.site..."
