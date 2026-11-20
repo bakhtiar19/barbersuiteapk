@@ -49,7 +49,9 @@ const DB_FILE = fs.existsSync(path.join(DATA_DIR, 'barber_licenses.json'))
   ? path.join(DATA_DIR, 'barber_licenses.json')
   : fs.existsSync(path.join(DATA_DIR, 'licenses.json'))
     ? path.join(DATA_DIR, 'licenses.json')
-    : path.join(DATA_DIR, 'barber_licenses.json');
+    : fs.existsSync(path.join(DATA_DIR, 'kos_licenses.json'))
+      ? path.join(DATA_DIR, 'kos_licenses.json')
+      : path.join(DATA_DIR, 'barber_licenses.json');
 
 function loadDb() {
   if (!fs.existsSync(DB_FILE)) {
