@@ -9,7 +9,9 @@ import { listBarbers } from '@/db/repositories/barberRepo';
 import { getAllSettings, updateSettings } from '@/db/repositories/settingsRepo';
 import { checkAndRunAutoBackupOnBoot } from '@/features/backup/backupService';
 import { syncTrialMetadata } from '@/lib/license';
+import { disablePullToRefresh } from '@/platform/lifecycle';
 import { scheduleBackupReminder } from '@/platform/notifications';
+import { initPwaInstallListener } from '@/platform/pwaInstall';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useUiStore } from '@/stores/uiStore';
 import '@/styles/index.css';
@@ -81,6 +83,8 @@ async function bootstrapApp() {
   }
 }
 
+disablePullToRefresh();
+initPwaInstallListener();
 void bootstrapApp();
 
 createRoot(document.getElementById('root')!).render(

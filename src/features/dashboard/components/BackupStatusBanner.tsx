@@ -9,7 +9,7 @@ export function BackupStatusBanner() {
   const navigate = useNavigate();
   const status = getBackupReminderStatus(settings);
 
-  if (!status.isOverdue) return null;
+  if (!status.isOverdue || status.hasNeverBackedUp) return null;
 
   const isCritical = status.isCritical;
 

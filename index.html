@@ -13,9 +13,138 @@
     <link rel="icon" type="image/png" href="/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     <title>Barber Suite v4.2.0 by Kriakarya</title>
+    <style>
+      html,
+      body {
+        overscroll-behavior-y: none;
+        overscroll-behavior: none;
+      }
+      .bs-boot {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #f7f5f2;
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+      .bs-boot-stripe {
+        height: 4px;
+        width: 100%;
+        background: repeating-linear-gradient(
+          135deg,
+          #b91c1c 0 10px,
+          #ffffff 10px 20px,
+          #1e3a8a 20px 30px,
+          #ffffff 30px 40px
+        );
+      }
+      .bs-boot-center {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 24px;
+        text-align: center;
+      }
+      .bs-boot-logo-wrap {
+        position: relative;
+        margin-bottom: 16px;
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: #000000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      }
+      .bs-boot-pulse {
+        position: absolute;
+        inset: 0;
+        border-radius: 16px;
+        background: rgba(245, 158, 11, 0.15);
+        animation: bs-logo-pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+      }
+      .bs-boot-logo {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+        object-fit: contain;
+        display: block;
+      }
+      .bs-boot-title {
+        margin: 0;
+        font-family: ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+        font-size: 18px;
+        line-height: 28px;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: #111827;
+      }
+      .bs-boot-subtitle {
+        margin: 4px 0 0;
+        font-size: 12px;
+        line-height: 16px;
+        color: #6b7280;
+      }
+      .bs-boot-bar {
+        margin-top: 16px;
+        width: 144px;
+        height: 6px;
+        border-radius: 9999px;
+        background: rgba(231, 229, 228, 0.9);
+        overflow: hidden;
+      }
+      .bs-boot-bar-fill {
+        height: 100%;
+        width: 50%;
+        border-radius: 9999px;
+        background: linear-gradient(90deg, #b45309, #fbbf24, #b45309);
+        animation: bs-bar-slide 1.2s ease-in-out infinite;
+        will-change: transform;
+      }
+      @keyframes bs-bar-slide {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(200%);
+        }
+      }
+      @keyframes bs-logo-pulse {
+        75%,
+        100% {
+          transform: scale(1.35);
+          opacity: 0;
+        }
+      }
+    </style>
   </head>
   <body class="bg-canvas text-ink antialiased selection:bg-brand-100 selection:text-brand-900">
-    <div id="root"></div>
+    <div id="root">
+      <div class="bs-boot" aria-busy="true" aria-label="Memuat Barber Suite">
+        <div class="bs-boot-stripe"></div>
+        <div class="bs-boot-center">
+          <div class="bs-boot-logo-wrap">
+            <span class="bs-boot-pulse"></span>
+            <img
+              src="/icons/icon-192.png"
+              alt="Barber Suite"
+              width="64"
+              height="64"
+              fetchpriority="high"
+              class="bs-boot-logo"
+            />
+          </div>
+          <p class="bs-boot-title">Barber Suite</p>
+          <p class="bs-boot-subtitle">Menyiapkan aplikasi...</p>
+          <div class="bs-boot-bar">
+            <div class="bs-boot-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <jeep-sqlite autoSave="true"></jeep-sqlite>
     <script type="module" src="/src/main.tsx"></script>
   </body>
