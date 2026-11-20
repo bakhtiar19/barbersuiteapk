@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 echo "=========================================================="
 echo "  Memperbarui Admin Portal & Backend Barber Suite (VPS)   "
