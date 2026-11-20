@@ -27,13 +27,14 @@ EOF
 
 # 2. Unduh template HTML admin dan server backend Barber Suite
 echo ">> Mengunduh update terbaru dari GitHub..."
-curl -sSL -o "$DIR/public/index.html" https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/admin.html
+REPO="mukhlisprasetyotyo-hue/barber-suite-final"
+curl -sSL -o "$DIR/public/index.html" "https://raw.githubusercontent.com/$REPO/main/scripts/admin.html" || curl -sSL -o "$DIR/public/index.html" "https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/admin.html"
 cp "$DIR/public/index.html" "$DIR/index.html" 2>/dev/null || true
 cp "$DIR/public/index.html" "$DIR/admin.html" 2>/dev/null || true
 echo "[OK] Tampilan Admin Portal diperbarui di $DIR"
 
 # 3. Pasang server.js Barber Suite
-curl -sSL -o "$DIR/server.js" https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/server.js
+curl -sSL -o "$DIR/server.js" "https://raw.githubusercontent.com/$REPO/main/scripts/server.js" || curl -sSL -o "$DIR/server.js" "https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/server.js"
 echo "[OK] Script backend server.js diperbarui."
 
 # 4. Berikan izin akses ke user antigravity

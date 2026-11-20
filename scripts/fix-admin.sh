@@ -23,13 +23,14 @@ EOF
 
 # 2. Perbarui template HTML admin
 echo ">> Memperbarui admin.html..."
-curl -sSL -o "$DIR/public/index.html" https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/admin.html
+REPO="mukhlisprasetyotyo-hue/barber-suite-final"
+curl -sSL -o "$DIR/public/index.html" "https://raw.githubusercontent.com/$REPO/main/scripts/admin.html" || curl -sSL -o "$DIR/public/index.html" "https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/admin.html"
 cp "$DIR/public/index.html" "$DIR/index.html" 2>/dev/null || true
 cp "$DIR/public/index.html" "$DIR/admin.html" 2>/dev/null || true
 
 # 3. Perbarui server.js Barber Suite
 echo ">> Memperbarui server.js..."
-curl -sSL -o "$DIR/server.js" https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/server.js
+curl -sSL -o "$DIR/server.js" "https://raw.githubusercontent.com/$REPO/main/scripts/server.js" || curl -sSL -o "$DIR/server.js" "https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/server.js"
 
 # 4. Berikan izin akses ke user antigravity
 if id -u antigravity >/dev/null 2>&1; then
