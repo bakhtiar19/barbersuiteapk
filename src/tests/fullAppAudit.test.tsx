@@ -78,7 +78,7 @@ describe('Full Application Audit (All Routes & Edge Cases)', () => {
     const { unmount } = render(<App onRetryBoot={() => undefined} />);
 
     // 1. Onboarding setup
-    const barberInput = await screen.findByPlaceholderText(/Nama barber 1/i, {}, { timeout: 5000 });
+    const barberInput = await screen.findByPlaceholderText(/Nama barber 1/i);
     fireEvent.change(barberInput, { target: { value: 'Dimas' } });
     const startBtn = await screen.findByRole('button', { name: /Simpan & Mulai Pakai Kasir/i });
     fireEvent.click(startBtn);

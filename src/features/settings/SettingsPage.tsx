@@ -11,7 +11,6 @@ import { Select } from '@/components/ui/Select';
 import { updateSettings } from '@/db/repositories/settingsRepo';
 import { shopSettingsSchema } from '@/features/settings/schema';
 import { hashPin } from '@/lib/crypto';
-import { syncTrialMetadata } from '@/lib/license';
 import { scheduleBackupReminder } from '@/platform/notifications';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useUiStore } from '@/stores/uiStore';
@@ -114,11 +113,6 @@ export function SettingsPage() {
         week_start: parsed.data.week_start as 0 | 1,
       });
       setSettings(updated);
-      void syncTrialMetadata({
-        shop_name: updated.shop_name,
-        shop_phone: updated.shop_phone,
-        shop_address: updated.shop_address,
-      });
       await scheduleBackupReminder(updated.backup_interval_days);
       showToast('Pengaturan disimpan.', 'success');
     } catch (err) {

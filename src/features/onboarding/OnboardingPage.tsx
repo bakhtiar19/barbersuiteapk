@@ -9,7 +9,6 @@ import { createBarber } from '@/db/repositories/barberRepo';
 import { updateSettings } from '@/db/repositories/settingsRepo';
 import { parseAndValidateBackup, restoreFromBackup } from '@/features/backup/backupService';
 import { formatDateTimeId } from '@/lib/date';
-import { syncTrialMetadata } from '@/lib/license';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useUiStore } from '@/stores/uiStore';
 import type { BackupFile } from '@/types/domain';
@@ -76,11 +75,6 @@ export function OnboardingPage() {
       });
 
       setSettings(updated);
-      void syncTrialMetadata({
-        shop_name: updated.shop_name,
-        shop_phone: updated.shop_phone,
-        shop_address: updated.shop_address,
-      });
       if (firstBarberId) setLastBarberId(firstBarberId);
       showToast('Barbershop siap digunakan!', 'success');
       navigate('/', { replace: true });

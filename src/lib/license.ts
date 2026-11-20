@@ -210,66 +210,21 @@ export async function saveStoredTrial(trial: StoredTrial): Promise<void> {
   });
 }
 
-export interface TrialMetadata {
-  shop_name?: string;
-  shop_phone?: string;
-  whatsapp?: string;
-  shop_address?: string;
-  total_transactions?: number;
-  total_revenue?: number;
-  app_version?: string;
-}
-
-const META_SHOP_NAME_KEY = 'barber_meta_shop_name';
-const META_SHOP_PHONE_KEY = 'barber_meta_shop_phone';
-const META_SHOP_ADDR_KEY = 'barber_meta_shop_address';
-const META_TRX_COUNT_KEY = 'barber_meta_trx_count';
-
-/**
- * Sinkronisasi data profil toko & keaktifan ke license server
- */
-export async function syncTrialMetadata(meta: TrialMetadata): Promise<void> {
-  if (meta.shop_name) await Preferences.set({ key: META_SHOP_NAME_KEY, value: meta.shop_name }).catch(() => undefined);
-  if (meta.shop_phone || meta.whatsapp) await Preferences.set({ key: META_SHOP_PHONE_KEY, value: meta.shop_phone || meta.whatsapp || '' }).catch(() => undefined);
-  if (meta.shop_address) await Preferences.set({ key: META_SHOP_ADDR_KEY, value: meta.shop_address }).catch(() => undefined);
-  if (typeof meta.total_transactions === 'number') await Preferences.set({ key: META_TRX_COUNT_KEY, value: String(meta.total_transactions) }).catch(() => undefined);
-
-  // Kirim data terbaru ke license server
-  void checkTrialStatus(meta).catch(() => undefined);
-}
-
 /**
  * Cek status trial otomatis 14 hari
  */
-export async function checkTrialStatus(meta?: TrialMetadata): Promise<{
+export async function checkTrialStatus(): Promise<{
   isValid: boolean;
   daysLeft: number;
   expiresAt: string;
   error?: string;
 }> {
-  if (meta?.shop_name) await Preferences.set({ key: META_SHOP_NAME_KEY, value: meta.shop_name }).catch(() => undefined);
-  if (meta?.shop_phone || meta?.whatsapp) await Preferences.set({ key: META_SHOP_PHONE_KEY, value: meta.shop_phone || meta.whatsapp || '' }).catch(() => undefined);
-  if (meta?.shop_address) await Preferences.set({ key: META_SHOP_ADDR_KEY, value: meta.shop_address }).catch(() => undefined);
-  if (typeof meta?.total_transactions === 'number') await Preferences.set({ key: META_TRX_COUNT_KEY, value: String(meta.total_transactions) }).catch(() => undefined);
-
-  const cachedShop = meta?.shop_name || (await Preferences.get({ key: META_SHOP_NAME_KEY }).then((r) => r.value || '').catch(() => ''));
-  const cachedPhone = meta?.shop_phone || meta?.whatsapp || (await Preferences.get({ key: META_SHOP_PHONE_KEY }).then((r) => r.value || '').catch(() => ''));
-  const cachedAddr = meta?.shop_address || (await Preferences.get({ key: META_SHOP_ADDR_KEY }).then((r) => r.value || '').catch(() => ''));
-  const cachedTrxStr = await Preferences.get({ key: META_TRX_COUNT_KEY }).then((r) => r.value || '').catch(() => '');
-  const cachedTrx = typeof meta?.total_transactions === 'number' ? meta.total_transactions : (cachedTrxStr ? parseInt(cachedTrxStr, 10) : 0);
-
   const device = await getDeviceInfo();
 
   try {
     const { ok, data } = await callLicenseApi('/api/trial/check', {
       device_id: device.deviceId,
       device_name: device.deviceName,
-      shop_name: cachedShop || undefined,
-      shop_phone: cachedPhone || undefined,
-      whatsapp: cachedPhone || undefined,
-      shop_address: cachedAddr || undefined,
-      total_transactions: cachedTrx,
-      app_version: meta?.app_version || 'v4.2.0',
       device_info: {
         model: device.model,
         platform: device.platform,
@@ -342,7 +297,7 @@ export async function checkTrialStatus(meta?: TrialMetadata): Promise<{
  * 2. Jika tidak ada Lisensi Berbayar -> Otomatis gunakan Trial 14 Hari.
  * 3. Jika Trial 14 Hari habis -> Terkunci (Minta input kredensial).
  */
-export async function checkAppAccess(meta?: TrialMetadata): Promise<AppAccessState> {
+export async function checkAppAccess(): Promise<AppAccessState> {
   const paidLicense = await getStoredLicense();
 
   // 1. Cek Lisensi Berbayar
@@ -380,7 +335,7 @@ export async function checkAppAccess(meta?: TrialMetadata): Promise<AppAccessSta
   }
 
   // 2. Jika belum punya lisensi berbayar -> Cek Masa Uji Coba 14 Hari
-  const trial = await checkTrialStatus(meta);
+  const trial = await checkTrialStatus();
   if (trial.isValid) {
     return {
       hasAccess: true,
