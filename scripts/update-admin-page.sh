@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 
-echo "Mengunduh template Admin Portal khusus Barber Suite..."
+echo "Mengunduh pembaruan Admin Portal & Backend Barber Suite..."
 curl -sSL -o /tmp/admin.html https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/admin.html
+curl -sSL -o /tmp/server.js https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/server.js
 
 DIR="/home/antigravity/barber-license-server"
 
@@ -12,28 +13,14 @@ cp /tmp/admin.html "$DIR/public/index.html"
 cp /tmp/admin.html "$DIR/index.html" 2>/dev/null || true
 echo "[OK] Template HTML di $DIR diperbarui."
 
-# Periksa apakah ada inline HTML di server.js
-node << 'NODE_UPDATE'
-const fs = require('fs');
-const path = '/home/antigravity/barber-license-server/server.js';
-try {
-    if (fs.existsSync(path)) {
-        let code = fs.readFileSync(path, 'utf8');
-        const newHtml = fs.readFileSync('/tmp/admin.html', 'utf8');
-        const start = code.indexOf('<!DOCTYPE html>');
-        const end = code.indexOf('</html>');
-        if (start !== -1 && end !== -1) {
-            code = code.substring(0, start) + newHtml + code.substring(end + 7);
-            fs.writeFileSync(path, code, 'utf8');
-            console.log('[OK] Inline HTML di server.js diperbarui.');
-        }
-    }
-} catch(e) {
-    console.log(e.message);
-}
-NODE_UPDATE
+# Pasang server.js jika folder backend ada, pertahankan .env dan data/
+if [ -d "$DIR" ]; then
+    cp "$DIR/server.js" "$DIR/server.js.bak" 2>/dev/null || true
+    sed 's/PORT || .3001./PORT || "3000"/g' /tmp/server.js > "$DIR/server.js"
+    echo "[OK] Backend server.js di $DIR diperbarui."
+fi
 
-rm -f /tmp/admin.html
+rm -f /tmp/admin.html /tmp/server.js
 
 # Reload process
 su - antigravity -c "pm2 restart all --update-env" 2>/dev/null || true
@@ -46,6 +33,6 @@ fi
 
 echo ""
 echo "=========================================================="
-echo "  BERHASIL! Admin Portal kini khusus untuk Barber Suite   "
+echo "  BERHASIL! Admin Portal & Server Barber Suite Diperbarui "
 echo "  Buka di: https://admin.barbersuite.site                 "
 echo "=========================================================="
