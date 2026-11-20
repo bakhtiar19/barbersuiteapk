@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -21,22 +20,36 @@ if (fs.existsSync(envPath)) {
   });
 }
 
-const PORT = parseInt(process.env.PORT || '3001', 10);
-const ADMIN_KEY = process.env.ADMIN_KEY || process.env.ADMIN_API_KEY || 'KosAdmin2026';
+const PORT = parseInt(process.env.PORT || '3000', 10);
+const ADMIN_KEY = process.env.ADMIN_KEY || process.env.ADMIN_API_KEY || 'BarberAdmin2026';
 const JWT_SECRET =
-  process.env.JWT_SECRET || 'kosku_master_jwt_secret_71f0d2bf59dd477393380d122bc3bb43474';
+  process.env.JWT_SECRET || 'barber_suite_master_jwt_secret_71f0d2bf59dd477393380d122bc3bb43474';
 
 const app = express();
-app.use(cors());
+
+// Zero-dependency CORS middleware (tidak perlu npm package cors tambahan)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-admin-key, admin-key');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
+
 app.use(express.json());
 
-// Persistent JSON Database Engine (Zero native C++ dependency, 100% reliable)
+// Persistent JSON Database Engine
 const DATA_DIR = path.join(__dirname, 'data');
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-const DB_FILE = path.join(DATA_DIR, 'kos_licenses.json');
+// Gunakan file database yang ada atau default barber_licenses.json
+const DB_FILE = fs.existsSync(path.join(DATA_DIR, 'barber_licenses.json'))
+  ? path.join(DATA_DIR, 'barber_licenses.json')
+  : fs.existsSync(path.join(DATA_DIR, 'licenses.json'))
+    ? path.join(DATA_DIR, 'licenses.json')
+    : path.join(DATA_DIR, 'barber_licenses.json');
 
 function loadDb() {
   if (!fs.existsSync(DB_FILE)) {
@@ -128,7 +141,7 @@ function requireAdmin(req, res, next) {
 app.get(['/health', '/api/health'], (req, res) => {
   res.json({
     status: 'ok',
-    service: 'Kos Suite License Server',
+    service: 'Barber Suite License Server',
     time: new Date().toISOString(),
   });
 });
@@ -563,25 +576,27 @@ app.delete('/api/admin/trials/:deviceId', requireAdmin, (req, res) => {
 });
 
 // -------------------------------------------------------------
-// SERVE CENTRAL ADMIN PORTAL (admin.kossuite.site)
+// SERVE CENTRAL ADMIN PORTAL (admin.barbersuite.site)
 // -------------------------------------------------------------
+const publicHtmlPath = path.join(__dirname, 'public', 'index.html');
+const indexHtmlPath = path.join(__dirname, 'index.html');
 const adminHtmlPath = path.join(__dirname, 'admin.html');
 const fallbackHtmlPath = path.join(__dirname, '..', 'scripts', 'admin.html');
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.get(['/', '/admin', '/admin/*'], (req, res) => {
-  if (fs.existsSync(adminHtmlPath)) {
-    return res.sendFile(adminHtmlPath);
-  }
-  if (fs.existsSync(fallbackHtmlPath)) {
-    return res.sendFile(fallbackHtmlPath);
-  }
-  res.send('Kos Suite License Server is running.');
+  if (fs.existsSync(publicHtmlPath)) return res.sendFile(publicHtmlPath);
+  if (fs.existsSync(indexHtmlPath)) return res.sendFile(indexHtmlPath);
+  if (fs.existsSync(adminHtmlPath)) return res.sendFile(adminHtmlPath);
+  if (fs.existsSync(fallbackHtmlPath)) return res.sendFile(fallbackHtmlPath);
+  res.send('Barber Suite License Server is running.');
 });
 
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`==========================================================`);
-  console.log(`  Kos Suite License & Trial Server Aktif                  `);
+  console.log(`  Barber Suite License & Trial Server Aktif               `);
   console.log(`  Port: ${PORT}                                           `);
   console.log(`  Master Admin Key: ${ADMIN_KEY}                          `);
   console.log(`  Admin Portal: http://localhost:${PORT}/                 `);
