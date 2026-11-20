@@ -17,67 +17,67 @@ fi
 
 echo ">> Folder backend: $DIR"
 
-# 1. Unduh template HTML admin dan server backend Barber Suite
-echo ">> Mengunduh update terbaru dari GitHub..."
-curl -sSL -o /tmp/admin.html https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/admin.html
-curl -sSL -o /tmp/server.js https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/server.js
+# 1. Pastikan .env terdefinisi dengan benar
+cat << 'EOF' > "$DIR/.env"
+PORT=3000
+ADMIN_KEY=BarberAdmin2026
+ADMIN_API_KEY=BarberAdmin2026
+JWT_SECRET=barber_suite_master_jwt_secret_71f0d2bf59dd477393380d122bc3bb43474
+EOF
 
-# 2. Pasang template admin.html ke semua lokasi yang mungkin disajikan
-mkdir -p "$DIR/public"
-cp /tmp/admin.html "$DIR/public/index.html"
-cp /tmp/admin.html "$DIR/index.html"
-cp /tmp/admin.html "$DIR/admin.html"
+# 2. Unduh template HTML admin dan server backend Barber Suite
+echo ">> Mengunduh update terbaru dari GitHub..."
+curl -sSL -o "$DIR/public/index.html" https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/admin.html
+cp "$DIR/public/index.html" "$DIR/index.html" 2>/dev/null || true
+cp "$DIR/public/index.html" "$DIR/admin.html" 2>/dev/null || true
 echo "[OK] Tampilan Admin Portal diperbarui di $DIR"
 
-# 3. Pasang server.js Barber Suite (Port 3000, zero-dependency CORS)
-cp "$DIR/server.js" "$DIR/server.js.bak" 2>/dev/null || true
-cp /tmp/server.js "$DIR/server.js"
+# 3. Pasang server.js Barber Suite
+curl -sSL -o "$DIR/server.js" https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/server.js
 echo "[OK] Script backend server.js diperbarui."
 
-rm -f /tmp/admin.html /tmp/server.js
-
-# 4. Pastikan file permission dimiliki oleh user antigravity
+# 4. Berikan izin akses ke user antigravity
 if id -u antigravity >/dev/null 2>&1; then
-    chown -R antigravity:antigravity "$DIR" 2>/dev/null || true
+    chown -R antigravity:antigravity "$DIR"
 fi
-chmod -R 755 "$DIR" 2>/dev/null || true
+chmod -R 755 "$DIR"
 
-# 5. Hentikan node lama dan jalankan ulang
-echo ">> Memuat ulang proses Node.js..."
-pkill -f "node.*server.js" 2>/dev/null || true
-sleep 1
-
+# 5. Bersihkan instance PM2 yang bentrok / duplikat dan restart
+echo ">> Menata ulang proses PM2..."
 if id -u antigravity >/dev/null 2>&1; then
-    su - antigravity -c "pm2 restart all --update-env 2>/dev/null || (cd $DIR && pm2 start server.js --name barber-server --update-env)" 2>/dev/null || true
+    su - antigravity -c "pm2 delete server 2>/dev/null || true"
+    su - antigravity -c "pm2 delete barber-license-server 2>/dev/null || true"
+    su - antigravity -c "pm2 delete barber-server 2>/dev/null || true"
+    su - antigravity -c "cd $DIR && PORT=3000 pm2 start server.js --name barber-license-server --update-env"
+    su - antigravity -c "pm2 save"
 else
-    pm2 restart all --update-env 2>/dev/null || (cd "$DIR" && pm2 start server.js --name barber-server --update-env) 2>/dev/null || true
+    pm2 delete server 2>/dev/null || true
+    pm2 delete barber-license-server 2>/dev/null || true
+    pm2 delete barber-server 2>/dev/null || true
+    cd "$DIR" && PORT=3000 pm2 start server.js --name barber-license-server --update-env
+    pm2 save
 fi
 
 sleep 2
-
-# Fallback jika port 3000 belum aktif
-if ! ss -tulpn 2>/dev/null | grep -q ":3000"; then
-    echo ">> Memulai langsung via background process..."
-    if id -u antigravity >/dev/null 2>&1; then
-        su - antigravity -c "cd $DIR && nohup node server.js > /var/log/barber-server.log 2>&1 &"
-    else
-        (cd "$DIR" && nohup node server.js > /var/log/barber-server.log 2>&1 &)
-    fi
-    sleep 2
-fi
 
 # 6. Reload Nginx
 echo ">> Mereload Nginx..."
 systemctl reload nginx 2>/dev/null || true
 
+# 7. Tes respon HTTP port 3000
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000/ || echo "FAIL")
+
 echo ""
 echo "=========================================================="
-if ss -tulpn 2>/dev/null | grep -q ":3000"; then
+if [ "$HTTP_CODE" == "200" ] || [ "$HTTP_CODE" == "304" ]; then
     echo "  STATUS: [SUKSES BERJALAN] Port 3000 Aktif Normal!       "
     echo "  Portal Admin : https://admin.barbersuite.site           "
-    echo "  Kasir Web    : https://barbersuite.site                 "
+    echo "  Kunci Admin  : BarberAdmin2026                          "
 else
-    echo "  STATUS: [PERINGATAN] Port 3000 belum menyala!           "
-    echo "  Cek log error dengan perintah: cat /var/log/barber-server.log"
+    echo "  STATUS: [PERINGATAN] Port 3000 respon HTTP: $HTTP_CODE  "
+    echo "  Log error terakhir:"
+    if id -u antigravity >/dev/null 2>&1; then
+        su - antigravity -c "pm2 logs barber-license-server --lines 15 --nostream" || true
+    fi
 fi
 echo "=========================================================="
