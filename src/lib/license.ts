@@ -15,6 +15,15 @@ const CANDIDATE_SERVERS = [
   'http://202.10.35.192',
 ].filter((s) => s !== undefined && s !== null) as string[];
 
+export interface TrialMetadata {
+  shop_name?: string;
+  shop_phone?: string;
+  whatsapp?: string;
+  shop_address?: string;
+  total_transactions?: number;
+  app_version?: string;
+}
+
 export interface StoredLicense {
   licenseKey: string;
   clientName: string;
@@ -213,7 +222,7 @@ export async function saveStoredTrial(trial: StoredTrial): Promise<void> {
 /**
  * Cek status trial otomatis 14 hari
  */
-export async function checkTrialStatus(): Promise<{
+export async function checkTrialStatus(meta?: TrialMetadata): Promise<{
   isValid: boolean;
   daysLeft: number;
   expiresAt: string;
@@ -225,6 +234,12 @@ export async function checkTrialStatus(): Promise<{
     const { ok, data } = await callLicenseApi('/api/trial/check', {
       device_id: device.deviceId,
       device_name: device.deviceName,
+      shop_name: meta?.shop_name,
+      shop_phone: meta?.shop_phone,
+      whatsapp: meta?.whatsapp || meta?.shop_phone,
+      shop_address: meta?.shop_address,
+      total_transactions: meta?.total_transactions,
+      app_version: meta?.app_version || 'v4.2.0',
       device_info: {
         model: device.model,
         platform: device.platform,
@@ -289,6 +304,18 @@ export async function checkTrialStatus(): Promise<{
     expiresAt: fallbackExpiry,
   });
   return { isValid: true, daysLeft: 14, expiresAt: fallbackExpiry };
+}
+
+/**
+ * Sinkronisasi data identitas toko / nomor HP / transaksi ke server lisensi
+ * tanpa mengganggu rendering UI.
+ */
+export async function syncTrialMetadata(meta: TrialMetadata): Promise<void> {
+  try {
+    await checkTrialStatus(meta);
+  } catch {
+    // Non-blocking background sync
+  }
 }
 
 /**

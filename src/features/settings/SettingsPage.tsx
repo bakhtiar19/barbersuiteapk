@@ -9,6 +9,7 @@ import { Input, TextArea } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
 import { Select } from '@/components/ui/Select';
 import { updateSettings } from '@/db/repositories/settingsRepo';
+import { syncTrialMetadata } from '@/lib/license';
 import { shopSettingsSchema } from '@/features/settings/schema';
 import { hashPin } from '@/lib/crypto';
 import { scheduleBackupReminder } from '@/platform/notifications';
@@ -114,6 +115,11 @@ export function SettingsPage() {
       });
       setSettings(updated);
       await scheduleBackupReminder(updated.backup_interval_days);
+      void syncTrialMetadata({
+        shop_name: updated.shop_name,
+        shop_phone: updated.shop_phone,
+        shop_address: updated.shop_address,
+      });
       showToast('Pengaturan disimpan.', 'success');
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'Gagal menyimpan pengaturan.');

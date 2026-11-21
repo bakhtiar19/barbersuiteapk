@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
 import { createBarber } from '@/db/repositories/barberRepo';
 import { updateSettings } from '@/db/repositories/settingsRepo';
+import { syncTrialMetadata } from '@/lib/license';
 import { parseAndValidateBackup, restoreFromBackup } from '@/features/backup/backupService';
 import { formatDateTimeId } from '@/lib/date';
 import { useSettingsStore } from '@/stores/settingsStore';
@@ -76,6 +77,11 @@ export function OnboardingPage() {
 
       setSettings(updated);
       if (firstBarberId) setLastBarberId(firstBarberId);
+      void syncTrialMetadata({
+        shop_name: cleanShop,
+        shop_phone: shopPhone.trim(),
+        shop_address: shopAddress.trim(),
+      });
       showToast('Barbershop siap digunakan!', 'success');
       navigate('/', { replace: true });
     } catch (err) {

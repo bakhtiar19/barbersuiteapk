@@ -4,10 +4,11 @@ import { Capacitor } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { App } from '@/App';
-import { initDatabase } from '@/db/client';
+import { initDatabase, queryOne } from '@/db/client';
 import { listBarbers } from '@/db/repositories/barberRepo';
 import { getAllSettings, updateSettings } from '@/db/repositories/settingsRepo';
 import { checkAndRunAutoBackupOnBoot } from '@/features/backup/backupService';
+import { syncTrialMetadata } from '@/lib/license';
 import { disablePullToRefresh } from '@/platform/lifecycle';
 import { scheduleBackupReminder } from '@/platform/notifications';
 import { initPwaInstallListener } from '@/platform/pwaInstall';
@@ -53,9 +54,22 @@ async function bootstrapApp() {
 
     ui.setAppReady(true);
 
-    // Background safety tasks (non-blocking)
+    // Background safety tasks & admin trial tracking (non-blocking)
     void checkAndRunAutoBackupOnBoot(settings).catch(() => undefined);
     void scheduleBackupReminder(settings.backup_interval_days).catch(() => undefined);
+
+    void (async () => {
+      try {
+        const trxRow = await queryOne<{ total: number }>('SELECT COUNT(*) AS total FROM transactions');
+        await syncTrialMetadata({
+          shop_name: settings.shop_name,
+          shop_phone: settings.shop_phone,
+          shop_address: settings.shop_address,
+          total_transactions: trxRow?.total || 0,
+          app_version: 'v4.2.0',
+        });
+      } catch {}
+    })();
   } catch (err) {
     ui.setDbError(
       err instanceof Error
