@@ -44,14 +44,32 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-const DB_FILE = fs.existsSync(path.join(DATA_DIR, 'barber_licenses.json'))
-  ? path.join(DATA_DIR, 'barber_licenses.json')
-  : fs.existsSync(path.join(DATA_DIR, 'licenses.json'))
-    ? path.join(DATA_DIR, 'licenses.json')
-    : path.join(DATA_DIR, 'barber_licenses.json');
+const DB_FILE = path.join(DATA_DIR, 'barber_licenses.json');
 
 function loadDb() {
+  const candidates = [
+    path.join(DATA_DIR, 'kos_licenses.json'),
+    path.join(DATA_DIR, 'licenses.json'),
+    path.join(__dirname, 'data', 'kos_licenses.json'),
+    path.join(__dirname, 'licenses.json'),
+    path.join(__dirname, 'kos_licenses.json'),
+  ];
+
   if (!fs.existsSync(DB_FILE)) {
+    // Cari apakah ada data lama di file lain
+    for (const cand of candidates) {
+      if (fs.existsSync(cand)) {
+        try {
+          const raw = fs.readFileSync(cand, 'utf8');
+          const parsed = JSON.parse(raw);
+          if ((parsed.licenses && parsed.licenses.length > 0) || (parsed.trials && parsed.trials.length > 0)) {
+            fs.writeFileSync(DB_FILE, JSON.stringify(parsed, null, 2), 'utf8');
+            return parsed;
+          }
+        } catch (e) {}
+      }
+    }
+
     const initial = {
       licenses: [
         {
@@ -71,9 +89,29 @@ function loadDb() {
     fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), 'utf8');
     return initial;
   }
+
   try {
     const raw = fs.readFileSync(DB_FILE, 'utf8');
-    return JSON.parse(raw);
+    const current = JSON.parse(raw);
+    const currentCount = (current.licenses?.length || 0) + (current.trials?.length || 0);
+
+    // Jika file saat ini hanya memiliki data default/kosong, pulihkan dari kandidat yang lebih lengkap
+    if (currentCount <= 1) {
+      for (const cand of candidates) {
+        if (fs.existsSync(cand)) {
+          try {
+            const candRaw = fs.readFileSync(cand, 'utf8');
+            const candDb = JSON.parse(candRaw);
+            const candCount = (candDb.licenses?.length || 0) + (candDb.trials?.length || 0);
+            if (candCount > currentCount) {
+              fs.writeFileSync(DB_FILE, JSON.stringify(candDb, null, 2), 'utf8');
+              return candDb;
+            }
+          } catch (e) {}
+        }
+      }
+    }
+    return current;
   } catch (err) {
     console.error('Error reading db file:', err);
     return { licenses: [], trials: [], nextLicenseId: 1 };
