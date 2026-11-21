@@ -29,16 +29,16 @@ mkdir -p "$DIR/data"
 
 # 2. Unduh template HTML admin terbaru (dengan kolom Nama Barber, Nomor HP, Terakhir Login)
 echo ">> Mengunduh update tampilan Admin Portal..."
-curl -fsSL -o "$DIR/public/index.html" "https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/admin.html" || \
-curl -fsSL -o "$DIR/public/index.html" "https://raw.githubusercontent.com/mukhlisprasetyotyo-hue/barber-suite-final/main/scripts/admin.html"
+curl -fsSL -o "$DIR/public/index.html" "https://raw.githubusercontent.com/mukhlisprasetyotyo-hue/barber-suite-final/main/scripts/admin.html" || \
+curl -fsSL -o "$DIR/public/index.html" "https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/admin.html"
 cp "$DIR/public/index.html" "$DIR/index.html" 2>/dev/null || true
 cp "$DIR/public/index.html" "$DIR/admin.html" 2>/dev/null || true
 echo "[OK] Tampilan Admin Portal diperbarui di $DIR"
 
 # 3. Pasang server.js backend Barber Suite
 echo ">> Mengunduh server.js backend..."
-curl -fsSL -o "$DIR/server.js" "https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/server.js" || \
-curl -fsSL -o "$DIR/server.js" "https://raw.githubusercontent.com/mukhlisprasetyotyo-hue/barber-suite-final/main/scripts/server.js"
+curl -fsSL -o "$DIR/server.js" "https://raw.githubusercontent.com/mukhlisprasetyotyo-hue/barber-suite-final/main/scripts/server.js" || \
+curl -fsSL -o "$DIR/server.js" "https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/server.js"
 
 # Validasi sintaks file server.js sebelum dijalankan
 if node -c "$DIR/server.js" 2>/dev/null; then
