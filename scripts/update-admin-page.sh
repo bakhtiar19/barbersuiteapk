@@ -35,17 +35,23 @@ cp "$DIR/public/index.html" "$DIR/index.html" 2>/dev/null || true
 cp "$DIR/public/index.html" "$DIR/admin.html" 2>/dev/null || true
 echo "[OK] Tampilan Admin Portal diperbarui di $DIR"
 
-# 3. Pasang server.js backend Barber Suite
+# 3. Pasang server.js & server.cjs backend Barber Suite
 echo ">> Mengunduh server.js backend..."
 curl -fsSL -o "$DIR/server.js" "https://raw.githubusercontent.com/mukhlisprasetyotyo-hue/barber-suite-final/main/scripts/server.js" || \
 curl -fsSL -o "$DIR/server.js" "https://raw.githubusercontent.com/bakhtiar19/barbersuiteapk/main/scripts/server.js"
+cp "$DIR/server.js" "$DIR/server.cjs"
 
-# Validasi sintaks file server.js sebelum dijalankan
-if node -c "$DIR/server.js" 2>/dev/null; then
-    echo "[OK] Script backend server.js valid dan siap dijalankan."
+# Ubah "type": "module" di package.json backend jika ada, agar Node.js tidak error require
+if [ -f "$DIR/package.json" ]; then
+    sed -i 's/"type"[[:space:]]*:[[:space:]]*"module"/"type": "commonjs"/g' "$DIR/package.json" 2>/dev/null || true
+fi
+
+# Validasi sintaks file backend sebelum dijalankan
+if node -c "$DIR/server.cjs" 2>/dev/null; then
+    echo "[OK] Script backend server.cjs valid dan siap dijalankan."
 else
-    echo "[FATAL] server.js tidak valid syntax!"
-    node -c "$DIR/server.js" || true
+    echo "[FATAL] server.cjs tidak valid syntax!"
+    node -c "$DIR/server.cjs" || true
     exit 1
 fi
 
@@ -63,13 +69,13 @@ echo ">> Menata ulang proses PM2..."
 if id -u antigravity >/dev/null 2>&1; then
     su - antigravity -c "pm2 delete server 2>/dev/null || true"
     su - antigravity -c "pm2 delete barber-license-server 2>/dev/null || true"
-    su - antigravity -c "cd $DIR && PORT=3000 pm2 start server.js --name barber-license-server"
+    su - antigravity -c "cd $DIR && PORT=3000 pm2 start server.cjs --name barber-license-server"
     su - antigravity -c "pm2 save"
 fi
 
 pm2 delete server 2>/dev/null || true
 pm2 delete barber-license-server 2>/dev/null || true
-cd "$DIR" && PORT=3000 pm2 start server.js --name barber-license-server
+cd "$DIR" && PORT=3000 pm2 start server.cjs --name barber-license-server
 pm2 save
 
 sleep 2
